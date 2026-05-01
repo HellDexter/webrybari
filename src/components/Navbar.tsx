@@ -22,7 +22,7 @@ const navigation = [
     name: 'Pro rybáře',
     items: [
       { name: 'Naše revíry', href: '/pro-rybare/reviry' },
-      { name: 'Rybářská stráž', href: '/pro-rybare/rybarska-straz' },
+      { name: 'Informace o RS', href: '/pro-rybare/rybarska-straz' },
       { name: 'Rybářský řád', href: '/pro-rybare/rad' },
       { name: 'Školení k získání RL', href: '/pro-rybare/skoleni' },
     ]
@@ -38,10 +38,11 @@ const navigation = [
   {
     name: 'Dění v organizaci',
     items: [
-      { name: 'Aktuality a zprávy', href: '/aktuality' },
+      { name: 'Všechny aktuality', href: '/aktuality' },
       { name: 'Závody', href: '/aktuality?kategorie=Závody' },
       { name: 'Brigády', href: '/aktuality?kategorie=Brigády' },
       { name: 'Zarybňování', href: '/aktuality?kategorie=Zarybňování' },
+      { name: 'Hlášení stráže', href: '/aktuality?kategorie=straz' },
     ]
   },
   {

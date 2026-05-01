@@ -181,41 +181,75 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Nová sekce Kalendář na Homepage */}
-      <section className="py-24 bg-gray-900 overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+      {/* Modernizovaná sekce Kalendář */}
+      <section className="py-24 bg-[#0a0f18] relative overflow-hidden">
+        {/* Dekorativní pozadí - jemná záře */}
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px]"></div>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-20">
             <div className="max-w-2xl">
-              <h2 className="text-4xl font-bold tracking-tight text-white">Nejbližší akce</h2>
-              <p className="mt-4 text-lg text-gray-400">Nezmeškejte závody, brigády a další setkání.</p>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="h-px w-8 bg-green-500"></span>
+                <span className="text-green-500 font-black uppercase tracking-[0.2em] text-xs">Plánované události</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
+                Nejbližší <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">akce</span>
+              </h2>
+              <p className="mt-4 text-lg text-gray-400">Sledujte společné výpravy, závody a důležitá setkání u vody.</p>
             </div>
-            <Link href="/aktuality/kalendar" className="flex items-center gap-2 text-green-400 font-bold hover:text-green-300 transition-colors">
-              Celý kalendář <ArrowRight className="w-5 h-5" />
+            <Link href="/aktuality/kalendar" className="group flex items-center gap-3 text-white font-bold bg-white/5 hover:bg-green-600 px-6 py-3 rounded-full transition-all duration-300 border border-white/10 hover:border-green-500">
+              Celý kalendář <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="space-y-6">
             {upcomingEvents && upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event) => (
-                <div key={event.id} className="bg-gray-800/50 backdrop-blur border border-white/10 p-8 rounded-[2rem] hover:bg-gray-800 transition-colors group">
-                  <div className="text-green-500 font-black text-sm uppercase tracking-widest mb-4">
-                    {new Date(event.date).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })}
+              upcomingEvents.map((event, idx) => (
+                <div key={event.id} className="group relative flex flex-col md:flex-row gap-6 md:items-center">
+                  {/* Datum - Kalendářový lístek */}
+                  <div className="flex-shrink-0 w-20 h-20 bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center group-hover:bg-green-600 group-hover:border-green-500 transition-all duration-500 shadow-xl">
+                    <span className="text-2xl font-black text-white leading-none">
+                      {new Date(event.date).getDate()}
+                    </span>
+                    <span className="text-[10px] font-black text-green-500 uppercase tracking-widest mt-1 group-hover:text-white transition-colors">
+                      {new Date(event.date).toLocaleDateString('cs-CZ', { month: 'short' }).replace('.', '')}
+                    </span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-4 group-hover:text-green-400 transition-colors">{event.title}</h3>
-                  <div className="space-y-2 text-sm text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" /> {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                    {event.location && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" /> {event.location}
+
+                  {/* Karta akce */}
+                  <div className="flex-grow bg-white/[0.03] backdrop-blur-sm border border-white/5 p-6 md:p-8 rounded-[2rem] hover:bg-white/[0.07] hover:border-white/20 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="space-y-2">
+                      <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-green-400 transition-colors">
+                        {event.title}
+                      </h3>
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
+                        <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+                          <Clock className="w-4 h-4 text-green-500" /> 
+                          {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                        {event.location && (
+                          <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+                            <MapPin className="w-4 h-4 text-blue-400" /> 
+                            {event.location}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
+                    
+                    <div className="hidden md:block">
+                      <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-green-600 group-hover:border-green-500 transition-all duration-500">
+                        <ArrowRight className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 italic col-span-full">Momentálně nejsou naplánovány žádné akce.</p>
+              <div className="py-12 px-8 bg-white/5 rounded-3xl border border-white/10 text-center">
+                <p className="text-gray-500 italic">Momentálně nejsou naplánovány žádné akce.</p>
+              </div>
             )}
           </div>
         </div>

@@ -224,98 +224,112 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
         </div>
       </nav>
 
-      {/* Mobile menu - Kompletně předělané na moderní full-screen */}
+      {/* Mobile menu - Fix visibility a výšky */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 lg:hidden"
+            className="fixed inset-0 z-[9999] lg:hidden"
           >
-            <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
+            {/* Tmavý podklad (Overlay) */}
+            <div className="fixed inset-0 bg-gray-950/60 backdrop-blur-md" onClick={() => setMobileMenuOpen(false)}></div>
+            
+            {/* Bílý panel s menu */}
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm"
+              className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-white shadow-2xl flex flex-col h-screen overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center">
-                    <Fish className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-xl font-black text-gray-900">Menu</span>
+              {/* Hlavička menu - pevná nahoře */}
+              <div className="flex-none px-6 py-6 border-b border-gray-100 flex items-center justify-between bg-white">
+                <div className="flex flex-col">
+                  <span className="text-xl font-black text-gray-900 leading-none">
+                    ČRS MO <span className="text-green-600">Týn</span>
+                  </span>
+                  <span className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Navigace webu</span>
                 </div>
                 <button
                   type="button"
-                  className="p-2.5 rounded-xl bg-gray-100 text-gray-700"
+                  className="p-2 rounded-xl bg-gray-50 text-gray-700 active:bg-red-50 active:text-red-600"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-7 w-7" />
                 </button>
               </div>
               
-              <div className="space-y-6">
+              {/* Scrollovatelný obsah menu */}
+              <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10">
                 <Link 
                   href="/" 
-                  className="block text-lg font-bold text-gray-900 p-4 bg-gray-50 rounded-2xl" 
+                  className="block text-lg font-black text-white bg-green-600 p-5 rounded-2xl shadow-lg shadow-green-100 text-center" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Hlavní strana
+                  HLAVNÍ STRANA
                 </Link>
                 
-                {navigation.map((navItem) => (
-                  <div key={navItem.name} className="space-y-2">
-                    <div className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{navItem.name}</div>
-                    <div className="grid grid-cols-1 gap-1">
-                      {navItem.items.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="flex items-center gap-4 rounded-2xl p-4 transition-all hover:bg-green-50 active:bg-green-100"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <span className="text-base font-bold text-gray-900">{item.name}</span>
-                        </Link>
-                      ))}
+                <div className="space-y-8 pb-10">
+                  {navigation.map((navItem) => (
+                    <div key={navItem.name} className="space-y-3">
+                      <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest pl-4">{navItem.name}</div>
+                      <div className="space-y-1">
+                        {navItem.items.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className="flex flex-col rounded-2xl p-4 transition-all active:bg-green-50 border border-transparent active:border-green-100"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <span className="text-base font-bold text-gray-900">{item.name}</span>
+                            <span className="text-xs font-medium text-gray-400 line-clamp-1">{item.desc}</span>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
 
-              <div className="mt-10 pt-10 border-t border-gray-100">
-                {userProfile ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl">
-                      <UserCircle className="w-6 h-6 text-green-600" />
-                      <span className="font-bold text-gray-900">{userProfile.first_name} {userProfile.last_name}</span>
-                    </div>
-                    {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
+                  {/* Uživatelská sekce v mobilu */}
+                  <div className="pt-8 border-t border-gray-100">
+                    {userProfile ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
+                          <UserCircle className="w-8 h-8 text-green-600" />
+                          <div className="flex flex-col">
+                             <span className="font-bold text-gray-900">{userProfile.first_name}</span>
+                             <span className="text-[10px] font-bold text-gray-400 uppercase">{userProfile.role}</span>
+                          </div>
+                        </div>
+                        
+                        {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
+                          <Link 
+                            href="/admin" 
+                            className="block w-full py-4 text-center text-white bg-green-600 font-black rounded-2xl shadow-md"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            ADMINISTRACE
+                          </Link>
+                        )}
+                        
+                        <form action={logout}>
+                          <button type="submit" className="w-full py-4 text-red-600 font-bold active:bg-red-50 rounded-2xl">
+                            Odhlásit se
+                          </button>
+                        </form>
+                      </div>
+                    ) : (
                       <Link 
-                        href="/admin" 
-                        className="block w-full py-4 text-center text-white bg-green-600 font-black rounded-2xl shadow-lg"
+                        href="/login" 
+                        className="block w-full py-4 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        VSTOUPIT DO ADMINISTRACE
+                        PŘIHLÁSIT SE
                       </Link>
                     )}
-                    <form action={logout}>
-                      <button type="submit" className="w-full py-4 flex items-center justify-center gap-2 text-red-600 font-bold hover:bg-red-50 rounded-2xl transition-colors">
-                        <LogOut className="w-5 h-5" /> Odhlásit se
-                      </button>
-                    </form>
                   </div>
-                ) : (
-                  <Link 
-                    href="/login" 
-                    className="block w-full py-4 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    PŘIHLÁSIT SE
-                  </Link>
-                )}
+                </div>
               </div>
             </motion.div>
           </motion.div>

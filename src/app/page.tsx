@@ -229,26 +229,33 @@ export default async function Home() {
             <p className="mt-4 text-lg text-gray-600">Nahlédněte do života naší organizace skrze objektiv.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
             {latestAlbums?.map((album) => (
               <Link 
                 key={album.id} 
                 href={`/fotogalerie/${album.id}`}
-                className="group relative aspect-square overflow-hidden rounded-3xl shadow-lg"
+                className="group flex flex-col"
               >
-                {album.photos?.[0] ? (
-                  <img src={album.photos[0].image_url} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                ) : (
-                  <div className="w-full h-full bg-gray-200" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <h4 className="text-xl font-bold mb-1">{album.title}</h4>
-                  <div className="flex items-center gap-2 text-xs text-gray-300 font-medium uppercase tracking-wider">
-                    <ImageIcon className="w-4 h-4" />
-                    {album.photos?.length || 0} fotografií
+                <div className="relative aspect-square overflow-hidden rounded-[2rem] shadow-md border border-gray-100 mb-6">
+                  {album.photos?.[0] ? (
+                    <img src={album.photos[0].image_url} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200" />
+                  )}
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
+                  <div className="absolute bottom-4 left-4">
+                    <span className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                      <ImageIcon className="w-3.5 h-3.5 text-green-400" />
+                      {album.photos?.length || 0} fotek
+                    </span>
                   </div>
                 </div>
+                <h4 className="text-xl font-bold text-gray-900 group-hover:text-green-700 transition-colors tracking-tight line-clamp-2">
+                  {album.title}
+                </h4>
+                <p className="mt-2 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
+                </p>
               </Link>
             ))}
           </div>

@@ -91,28 +91,26 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
       <div className="h-1 w-full bg-green-600"></div>
 
       {/* Horní informační lišta - skryta na mobilu */}
-      <div className={`hidden sm:block bg-green-600 text-white transition-all duration-300 overflow-hidden ${isScrolled ? 'h-0 opacity-0' : 'h-auto py-2.5'}`}>
-        <div className="mx-auto max-w-7xl px-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] font-black uppercase tracking-widest">
+      <div className={`hidden sm:block bg-green-600 text-white transition-all duration-300 overflow-hidden ${isScrolled ? 'h-0 opacity-0' : 'h-auto py-1.5'}`}>
+        <div className="mx-auto max-w-7xl px-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em]">
           <div className="flex items-center gap-6">
-            <a href="mailto:rybari.tyn@seznam.cz" className="flex items-center gap-2 hover:text-green-100 transition-colors">
-              <Mail className="w-3.5 h-3.5" /> <span>rybari.tyn@seznam.cz</span>
+            <a href="mailto:rybari.tyn@seznam.cz" className="flex items-center gap-2 hover:text-green-200 transition-all active:scale-95">
+              <Mail className="w-3 h-3" /> <span className="opacity-90">rybari.tyn@seznam.cz</span>
             </a>
-            <span className="hidden sm:inline w-1 h-1 rounded-full bg-white/30"></span>
-            <a href="tel:+420724034501" className="flex items-center gap-2 hover:text-green-100 transition-colors">
-              <Phone className="w-3.5 h-3.5" /> +420 724 034 501
+            <span className="hidden sm:inline w-1 h-1 rounded-full bg-white/20"></span>
+            <a href="tel:+420724034501" className="flex items-center gap-2 hover:text-green-200 transition-all active:scale-95">
+              <Phone className="w-3 h-3" /> <span className="opacity-90">+420 724 034 501</span>
             </a>
           </div>
           <div className="flex items-center gap-6">
-             <div className="hidden md:flex items-center gap-2 text-white/90 font-medium">
-               <MapPin className="w-3.5 h-3.5" /> Nábřeží Míru 312, Týn nad Vltavou
-             </div>
-             <div className="flex items-center gap-4">
-               <a href="https://www.facebook.com/rybari.tyn" target="_blank" rel="noopener noreferrer" className="hover:scale-125 transition-transform">
-                 <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24" aria-hidden="true">
-                   <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-                 </svg>
-               </a>
-             </div>
+             <a 
+               href="https://www.google.com/maps/search/?api=1&query=Nábřeží+Míru+312,+Týn+nad+Vltavou" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               className="hidden md:flex items-center gap-2 hover:text-green-200 transition-all active:scale-95"
+             >
+               <MapPin className="w-3 h-3" /> <span className="opacity-90">Nábřeží Míru 312, Týn nad Vltavou</span>
+             </a>
           </div>
         </div>
       </div>
@@ -389,14 +387,6 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Napište nám</span>
                         <span className="text-sm font-bold">rybari.tyn@seznam.cz</span>
                       </div>
-                    </a>
-                    <a href="https://www.facebook.com/rybari.tyn" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 bg-[#1877F2] text-white rounded-2xl shadow-lg shadow-blue-100 active:scale-95 transition-all text-left">
-                      <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                        <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
-                          <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-                        </svg>
-                      </div>
-                      <span className="text-sm font-bold">Facebook</span>
                     </a>
                   </div>
                   <div className="flex items-center gap-3 p-4 text-gray-400 text-left">

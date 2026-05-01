@@ -28,7 +28,7 @@ export async function submitQuestion(formData: FormData) {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        secret: '0x4AAAAAADEc1wdJq8dQGspeA0OQ7Oihl_o',
+        secret: process.env.TURNSTILE_SECRET_KEY || '',
         response: turnstileToken,
       }),
     });
@@ -39,8 +39,6 @@ export async function submitQuestion(formData: FormData) {
     }
   } catch (err) {
     console.error("Turnstile verification error:", err);
-    // V případě chyby API Cloudflare můžeme buď pustit (aby web fungoval), 
-    // nebo zastavit. Zde raději zastavíme.
     return { error: "Chyba při komunikaci s ověřovací službou." };
   }
 

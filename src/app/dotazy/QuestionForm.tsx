@@ -107,7 +107,7 @@ export default function QuestionForm() {
       <div className="mb-6 flex justify-center md:justify-start">
         <div 
           className="cf-turnstile" 
-          data-sitekey="0x4AAAAAADEc1_rIvaw3wP-L"
+          data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           data-theme="light"
         ></div>
       </div>

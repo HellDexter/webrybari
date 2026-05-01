@@ -152,7 +152,7 @@ export default async function AktualityPage({
                     )}
                   </div>
                   <h3 className="text-2xl font-black leading-snug text-gray-900 group-hover:text-green-600 transition-colors mb-4">
-                    <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}>
+                    <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.slug}`}>
                       {item.title}
                     </Link>
                   </h3>
@@ -163,7 +163,7 @@ export default async function AktualityPage({
                   </p>
                   
                   <Link 
-                    href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}
+                    href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors group/link"
                   >
                     {item.type === 'guard' ? 'Více o hlášení' : 'Číst celý článek'} 

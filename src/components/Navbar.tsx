@@ -148,8 +148,8 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
               </div>
               
               {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
-                <Link href="/admin" className="text-sm font-semibold leading-6 text-white bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded-md transition whitespace-nowrap">
-                  Administrace
+                <Link href="/admin" className="text-sm font-bold leading-6 text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all whitespace-nowrap">
+                  ADMINISTRACE
                 </Link>
               )}
 
@@ -216,9 +216,9 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                         <span>Přihlášen jako: {userProfile.first_name} {userProfile.last_name}</span>
                       </div>
                       
-                      {(userProfile.role === 'superuser' || userProfile.role === 'administrator') && (
-                        <Link href="/admin" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white bg-green-600 hover:bg-green-700 text-center" onClick={() => setMobileMenuOpen(false)}>
-                          Přejít do Administrace
+                      {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
+                        <Link href="/admin" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-bold leading-7 text-white bg-green-600 hover:bg-green-700 text-center shadow-inner" onClick={() => setMobileMenuOpen(false)}>
+                          VSTOUPIT DO ADMINISTRACE
                         </Link>
                       )}
                       

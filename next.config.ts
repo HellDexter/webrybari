@@ -46,9 +46,9 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' www.google.com www.gstatic.com challenges.cloudflare.com",
-              "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+              "style-src 'self' 'unsafe-inline' fonts.googleapis.com frontend-cdn.perplexity.ai",
               "img-src 'self' data: blob: *.supabase.co *.openstreetmap.org tile.openstreetmap.org *.google.com *.googleapis.com *.gstatic.com unpkg.com raw.githubusercontent.com cdnjs.cloudflare.com",
-              "font-src 'self' fonts.gstatic.com",
+              "font-src 'self' fonts.gstatic.com frontend-cdn.perplexity.ai",
               "connect-src 'self' *.supabase.co *.google.com *.googleapis.com *.openstreetmap.org challenges.cloudflare.com",
               "frame-src 'self' www.google.com maps.google.com challenges.cloudflare.com",
               "frame-ancestors 'self'",

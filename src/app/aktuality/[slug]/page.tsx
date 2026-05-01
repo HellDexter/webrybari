@@ -10,18 +10,24 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   const resolvedParams = await params
 
   // Načteme článek podle slugu
-  const { data: article } = await supabase
+  const { data: article, error: articleError } = await supabase
     .from('articles')
     .select('*')
     .eq('slug', resolvedParams.slug)
     .maybeSingle()
 
-  if (!article || !article.published) {
+  if (articleError) {
+    console.error('Chyba při načítání článku ze Supabase:', articleError)
+    throw new Error('Nepodařilo se načíst článek')
+  }
+
+  if (!article) {
+    console.log('Článek se slugem nebyl nalezen:', resolvedParams.slug)
     notFound()
   }
 
   // Zpracování obsahu - bezpečnější verze
-  const rawContent = (article && article.content) ? String(article.content).replace(/&nbsp;|\u00A0/g, ' ') : ''
+  const rawContent = article.content ? String(article.content).replace(/&nbsp;|\u00A0/g, ' ') : ''
   const sanitizedContent = sanitizeHtml(rawContent)
 
   const fixImagePaths = (html: string) => {

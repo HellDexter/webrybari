@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
-import { Folder, Image as ImageIcon, Calendar } from 'lucide-react'
+import { Folder, Image as ImageIcon, Calendar, ArrowRight } from 'lucide-react'
 
 export default async function FotogaleriePage({ 
   searchParams 
@@ -77,39 +77,56 @@ export default async function FotogaleriePage({
                 <Link 
                   key={album.id} 
                   href={`/fotogalerie/${album.id}`}
-                  className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  className="group block"
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden bg-gray-100">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] shadow-lg mb-6 bg-gray-100">
                     {coverPhoto ? (
                       <img 
                         src={coverPhoto} 
-                        alt={album.title} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        alt={album.name} 
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-gray-300">
+                      <div className="h-full w-full flex flex-col items-center justify-center text-gray-300">
                         <ImageIcon className="w-12 h-12 mb-2" />
-                        <span className="text-xs">Album je prázdné</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Prázdné album</span>
                       </div>
                     )}
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-white/90 backdrop-blur shadow-sm rounded-full text-[10px] font-bold text-green-700 uppercase tracking-wider">
-                        {album.category?.name || 'Nezařazeno'}
+                    
+                    {/* Badge kategorie */}
+                    <div className="absolute top-6 left-6">
+                      <span className="px-4 py-1.5 bg-white/95 backdrop-blur shadow-xl rounded-full text-[10px] font-black text-green-700 uppercase tracking-[0.2em]">
+                        {album.category?.name || 'Ostatní'}
+                      </span>
+                    </div>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+                      <span className="text-white font-bold flex items-center gap-2 text-sm">
+                        Otevřít album <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
                   </div>
-                  
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">
-                      {album.title}
+
+                  <div className="px-2">
+                    <h3 className="text-2xl font-black text-gray-900 group-hover:text-green-600 transition-colors leading-tight mb-2">
+                      {album.name}
                     </h3>
-                    <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {album.event_date ? new Date(album.event_date).toLocaleDateString('cs-CZ') : 'Datum neuvedeno'}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <ImageIcon className="w-4 h-4" />
+                    
+                    {album.description && (
+                      <p className="text-sm text-gray-500 line-clamp-2 mb-4 font-medium leading-relaxed">
+                        {album.description}
+                      </p>
+                    )}
+
+                    <div className="flex items-center gap-6">
+                      {album.event_date && new Date(album.event_date).getFullYear() > 1970 && (
+                        <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                          <Calendar className="w-3.5 h-3.5 text-green-500" />
+                          {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                        <ImageIcon className="w-3.5 h-3.5 text-green-500" />
                         {album.photos?.length || 0} fotek
                       </div>
                     </div>

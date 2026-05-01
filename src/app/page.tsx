@@ -330,7 +330,7 @@ export default async function Home() {
                   </div>
                   <div className="px-2 mt-4">
                     <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight mb-2">
-                      {album.title}
+                      {album.name}
                     </h3>
                     {album.description && (
                       <p className="text-sm text-gray-500 line-clamp-2 mb-3 font-medium">

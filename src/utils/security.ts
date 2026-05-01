@@ -1,21 +1,17 @@
-import DOMPurify from 'isomorphic-dompurify'
-
 /**
- * Sanitizuje HTML řetězec pro bezpečné vykreslení pomocí dangerouslySetInnerHTML.
- * Odstraní nebezpečné tagy jako <script>, <onerror>, <iframe> atd.
+ * Sanitizuje HTML řetězec pro bezpečné vykreslení.
+ * Na serveru (Vercel) se vyhýbáme těžkým knihovnám jako DOMPurify, 
+ * které způsobují problémy s ESM/CJS moduly.
  */
 export function sanitizeHtml(html: string): string {
   if (!html) return ''
   
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      'p', 'br', 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 
-      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre',
-      'img', 'span', 'div', 'table', 'thead', 'tbody', 'tr', 'th', 'td'
-    ],
-    ALLOWED_ATTR: [
-      'href', 'src', 'alt', 'title', 'class', 'target', 'rel', 
-      'width', 'height', 'style'
-    ]
-  }) as string
+  // Odstraníme nebezpečné tagy a atributy pomocí regulárních výrazů
+  // pro maximální stabilitu na Vercelu.
+  let sanitized = html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Odstraní scripty
+    .replace(/on\w+="[^"]*"/gi, '') // Odstraní event handlery jako onerror, onclick
+    .replace(/javascript:/gi, '')   // Odstraní javascript: linky
+    
+  return sanitized
 }

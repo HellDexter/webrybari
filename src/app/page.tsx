@@ -328,10 +328,17 @@ export default async function Home() {
                       </span>
                     </div>
                   </div>
-                  <div className="px-4">
-                    <h3 className="text-lg font-black text-gray-900 group-hover:text-green-600 transition-colors leading-tight mb-1">{album.title}</h3>
+                  <div className="px-2 mt-4">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight mb-2">
+                      {album.title}
+                    </h3>
+                    {album.description && (
+                      <p className="text-sm text-gray-500 line-clamp-2 mb-3 font-medium">
+                        {album.description}
+                      </p>
+                    )}
                     {album.event_date && new Date(album.event_date).getFullYear() > 1970 && (
-                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
                         {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
                       </p>
                     )}

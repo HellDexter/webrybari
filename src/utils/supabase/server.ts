@@ -41,7 +41,7 @@ export async function requireAdmin() {
     .eq('id', user.id)
     .single()
 
-  if (!profile || (profile.role !== 'admin' && profile.role !== 'superuser')) {
+  if (!profile || (profile.role !== 'administrator' && profile.role !== 'superuser')) {
     throw new Error('Unauthorized: Admin access required')
   }
 

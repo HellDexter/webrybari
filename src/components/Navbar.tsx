@@ -224,7 +224,7 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
         </div>
       </nav>
 
-      {/* Mobile menu - Fix visibility a výšky */}
+      {/* Mobile menu - Definitivní fix pozice a scrollování */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
@@ -232,41 +232,56 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[9999] lg:hidden"
+            // Vynucené blokování scrollu na pozadí při otevřeném menu
+            onViewportEnter={() => document.body.style.overflow = 'hidden'}
+            onViewportLeave={() => document.body.style.overflow = 'auto'}
           >
-            {/* Tmavý podklad (Overlay) */}
-            <div className="fixed inset-0 bg-gray-950/60 backdrop-blur-md" onClick={() => setMobileMenuOpen(false)}></div>
+            {/* Tmavý podklad (Overlay) přes celé okno */}
+            <div 
+              className="fixed inset-0 bg-gray-950/70 backdrop-blur-lg" 
+              onClick={() => {
+                setMobileMenuOpen(false)
+                document.body.style.overflow = 'auto'
+              }}
+            ></div>
             
-            {/* Bílý panel s menu */}
+            {/* Bílý panel menu - fixní na pravé straně s h-full */}
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-white shadow-2xl flex flex-col h-screen overflow-hidden"
+              className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-white shadow-[0_0_50px_rgba(0,0,0,0.3)] flex flex-col h-[100dvh] overflow-hidden"
             >
-              {/* Hlavička menu - pevná nahoře */}
+              {/* Hlavička menu - pevná */}
               <div className="flex-none px-6 py-6 border-b border-gray-100 flex items-center justify-between bg-white">
                 <div className="flex flex-col">
                   <span className="text-xl font-black text-gray-900 leading-none">
                     ČRS MO <span className="text-green-600">Týn</span>
                   </span>
-                  <span className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Navigace webu</span>
+                  <span className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 font-sans">Navigace webu</span>
                 </div>
                 <button
                   type="button"
-                  className="p-2 rounded-xl bg-gray-50 text-gray-700 active:bg-red-50 active:text-red-600"
-                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl bg-gray-50 text-gray-700 active:bg-red-50 active:text-red-600 transition-colors"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    document.body.style.overflow = 'auto'
+                  }}
                 >
                   <X className="h-7 w-7" />
                 </button>
               </div>
               
               {/* Scrollovatelný obsah menu */}
-              <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10">
+              <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10 overscroll-contain">
                 <Link 
                   href="/" 
-                  className="block text-lg font-black text-white bg-green-600 p-5 rounded-2xl shadow-lg shadow-green-100 text-center" 
-                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-lg font-black text-white bg-green-600 p-5 rounded-2xl shadow-xl shadow-green-100 text-center" 
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    document.body.style.overflow = 'auto'
+                  }}
                 >
                   HLAVNÍ STRANA
                 </Link>
@@ -280,8 +295,11 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                           <Link
                             key={item.name}
                             href={item.href}
-                            className="flex flex-col rounded-2xl p-4 transition-all active:bg-green-50 border border-transparent active:border-green-100"
-                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex flex-col rounded-2xl p-4 transition-all active:bg-green-50 border border-transparent"
+                            onClick={() => {
+                              setMobileMenuOpen(false)
+                              document.body.style.overflow = 'auto'
+                            }}
                           >
                             <span className="text-base font-bold text-gray-900">{item.name}</span>
                             <span className="text-xs font-medium text-gray-400 line-clamp-1">{item.desc}</span>
@@ -299,22 +317,29 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                           <UserCircle className="w-8 h-8 text-green-600" />
                           <div className="flex flex-col">
                              <span className="font-bold text-gray-900">{userProfile.first_name}</span>
-                             <span className="text-[10px] font-bold text-gray-400 uppercase">{userProfile.role}</span>
+                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">{userProfile.role}</span>
                           </div>
                         </div>
                         
                         {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
                           <Link 
                             href="/admin" 
-                            className="block w-full py-4 text-center text-white bg-green-600 font-black rounded-2xl shadow-md"
-                            onClick={() => setMobileMenuOpen(false)}
+                            className="block w-full py-5 text-center text-white bg-green-600 font-black rounded-2xl shadow-lg shadow-green-100"
+                            onClick={() => {
+                              setMobileMenuOpen(false)
+                              document.body.style.overflow = 'auto'
+                            }}
                           >
                             ADMINISTRACE
                           </Link>
                         )}
                         
                         <form action={logout}>
-                          <button type="submit" className="w-full py-4 text-red-600 font-bold active:bg-red-50 rounded-2xl">
+                          <button 
+                            type="submit" 
+                            className="w-full py-4 text-red-600 font-bold active:bg-red-50 rounded-2xl"
+                            onClick={() => document.body.style.overflow = 'auto'}
+                          >
                             Odhlásit se
                           </button>
                         </form>
@@ -322,8 +347,11 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                     ) : (
                       <Link 
                         href="/login" 
-                        className="block w-full py-4 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
-                        onClick={() => setMobileMenuOpen(false)}
+                        className="block w-full py-5 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
+                        onClick={() => {
+                          setMobileMenuOpen(false)
+                          document.body.style.overflow = 'auto'
+                        }}
                       >
                         PŘIHLÁSIT SE
                       </Link>

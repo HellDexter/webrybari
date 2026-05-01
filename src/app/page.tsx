@@ -189,7 +189,9 @@ export default async function Home() {
                     </Link>
                   </h3>
                   <p className="line-clamp-3 text-base leading-relaxed text-gray-500 font-medium mb-6 flex-grow">
-                    {item.type === 'guard' ? item.content : (item.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...')}
+                    {item.type === 'guard' 
+                      ? item.content 
+                      : item.perex || (item.content?.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[^;]+;/g, ' ').substring(0, 160) + '...')}
                   </p>
                   
                   <Link 

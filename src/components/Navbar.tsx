@@ -22,6 +22,7 @@ const navigation = [
     name: 'Pro rybáře',
     items: [
       { name: 'Naše revíry', href: '/pro-rybare/reviry' },
+      { name: 'Rybářská stráž', href: '/pro-rybare/rybarska-straz' },
       { name: 'Rybářský řád', href: '/pro-rybare/rad' },
       { name: 'Školení k získání RL', href: '/pro-rybare/skoleni' },
     ]

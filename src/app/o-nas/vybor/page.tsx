@@ -23,24 +23,37 @@ export default function VyborPage() {
     { role: "Člen komise", name: "Ing. Josef Panoch" },
   ];
 
+  const rybarskaStraz = [
+    { name: "Pavel Frýba", role: "Profesionální rybářská stráž", phone: "724 246 226", highlighted: true },
+    { name: "Aleš Švehla" }, { name: "Josef Vančata" }, { name: "Jaroslav Švehla" },
+    { name: "Josef Vlk" }, { name: "Jaroslav Kocián" }, { name: "Tomáš Kocián" },
+    { name: "Eduard Frýba" }, { name: "Jaroslav Mašek" }, { name: "Václav Rejnart" },
+    { name: "Mgr. Miroslav Janál" }, { name: "Pavel Valha" }, { name: "Libor Bukovský" },
+    { name: "Zdeněk Říha" }, { name: "Tomáš Vácha" }
+  ];
+
+  const cestniClenove = ["Ing. Eduard Frýba", "Jiří Mikeš st."];
+
   return (
     <div className="bg-gray-50 py-24 sm:py-32 flex-grow">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center mb-16">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Výbor ČRS, z.s., MO Týn nad Vltavou</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Výbor a představitelé MO</h1>
           <p className="mt-4 text-lg text-gray-600">
-            Představitelé naší místní organizace a kontaktní údaje pro případné dotazy.
+            Kompletní přehled členů výboru, dozorčí komise a rybářské stráže ČRS, z.s., MO Týn nad Vltavou.
           </p>
         </div>
 
         {/* Sekce Výbor */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-4">Členové výboru</h2>
+        <div className="mb-20">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-4 flex items-center gap-2">
+            <User className="w-6 h-6 text-green-600" /> Členové výboru
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {vybor.map((member, i) => (
               <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-md transition">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-green-100 text-green-700 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-green-50 text-green-700 rounded-full flex items-center justify-center flex-shrink-0">
                     <User className="w-5 h-5" />
                   </div>
                   <div>
@@ -69,13 +82,15 @@ export default function VyborPage() {
         </div>
 
         {/* Sekce Dozorčí komise */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-4">Dozorčí komise</h2>
+        <div className="mb-20">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-4 flex items-center gap-2">
+            <User className="w-6 h-6 text-blue-600" /> Dozorčí komise
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {dozorciKomise.map((member, i) => (
               <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-md transition">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-blue-50 text-blue-700 rounded-full flex items-center justify-center flex-shrink-0">
                     <User className="w-5 h-5" />
                   </div>
                   <div>
@@ -98,6 +113,42 @@ export default function VyborPage() {
                     </div>
                   )}
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sekce Rybářská stráž */}
+        <div className="mb-20">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-4 flex items-center gap-2">
+            <span className="w-6 h-6 flex items-center justify-center bg-red-100 text-red-600 rounded-full text-xs font-bold">!</span>
+            Rybářská stráž
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {rybarskaStraz.map((member, i) => (
+              <div key={i} className={`p-4 rounded-xl border ${member.highlighted ? 'bg-red-50 border-red-100 ring-1 ring-red-200' : 'bg-white border-gray-100'}`}>
+                <p className={`font-bold ${member.highlighted ? 'text-red-900' : 'text-gray-900'}`}>{member.name}</p>
+                <p className="text-xs text-gray-500 mb-2">{member.role || 'Člen RS'}</p>
+                {member.phone && (
+                  <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className="flex items-center gap-2 text-sm font-bold text-red-700 hover:underline">
+                    <Phone className="w-3 h-3" /> {member.phone}
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sekce Čestní členové */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-4 flex items-center gap-2">
+             <span className="w-6 h-6 flex items-center justify-center bg-yellow-100 text-yellow-600 rounded-full text-xs font-bold">★</span>
+             Čestní členové
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            {cestniClenove.map((name, i) => (
+              <div key={i} className="bg-white px-6 py-3 rounded-full shadow-sm border border-yellow-100 text-gray-900 font-bold flex items-center gap-2">
+                <span className="text-yellow-500 text-lg">🎖️</span> {name}
               </div>
             ))}
           </div>

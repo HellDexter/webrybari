@@ -11,30 +11,43 @@ export default function HistoriePage() {
             Historie naší organizace
           </h1>
           <p className="text-xl leading-8 text-gray-500 mb-10 border-b pb-10">
-            V tomto roce slaví naše MO 100 let od svého založení. Přečtěte si příběh rybářů na Vltavotýnsku od roku 1919 až po současnost.
+            Naše místní organizace hrdě navazuje na bohatou tradici sahající až do roku 1919. Přečtěte si příběh rybářů na Vltavotýnsku od jejích počátků až po současnost.
           </p>
 
           <div className="prose prose-green prose-lg max-w-none text-gray-600">
+            <div className="relative float-right ml-6 mb-6 w-72 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-2 grayscale hover:grayscale-0 transition duration-500">
+              <img src="/images/history/Image.jpg" alt="Historická fotografie" className="w-full h-auto" />
+            </div>
             <p><strong>Vážené kolegyně rybářky, vážení kolegové rybáři.</strong></p>
             <p>
               Píše se rok 1919, 29. listopadu. Stříbropěnná Vltava hučí týnskými jezy a netuší, že v této době je položen základní kámen pro budoucího patrona a ochránce. Tento den založilo 28 pánů z Vltavotýnska &quot;RYBÁŘSKÝ SPOLEK&quot;.
             </p>
+            
+            <div className="relative float-left mr-6 mb-6 w-64 p-2 bg-white shadow-xl border border-gray-100 rounded-sm -rotate-2 grayscale hover:grayscale-0 transition duration-500">
+              <img src="/images/history/hist2.jpg" alt="Staré Týnské jezy" className="w-full h-auto" />
+            </div>
             <p>
               Prvním předsedou rybářského spolku byl jednohlasně zvolen Emanuel Hájek. Spolek si dal do vínku to, že bude pečovat o rybí čeládku a všechno živé, co naše řeka od jezu na NOVÉM až po jez v PURKARCI spojuje. Tehdy si spolek rybářů pronajal tento úsek řeky od osmi vlastníků. Znamená to, že od roku 1920 je datován první rybářský lístek sportovního rybáře na Vltavotýnsku.
             </p>
             
-            <h3>První roky a zarybňování</h3>
+            <h3 className="clear-both">První roky a zarybňování</h3>
             <p>
               Cena rybářského lístku byla stanovena na 15 Kčs. V prvních letech měl rybářský lístek platnost jeden rok od data zakoupení. První prodej prováděl pan Bilič v drogerii na Horním Brašově. Držitel mohl lovit na tři udice a s příplatkem 25 Kčs i do dvou vrší.
             </p>
+            <div className="relative float-right ml-6 mb-6 w-80 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-1 grayscale hover:grayscale-0 transition duration-500">
+              <img src="/images/history/hist3.jpg" alt="Historický lov" className="w-full h-auto" />
+            </div>
             <p>
               Vedoucí zástupci spolku – předseda, hospodář a jednatel – požívali výsady lovu z lodě. Mlynáři, mající živnost na řece, obdrželi právo chytat zdarma s ohledem na to, že o vodu pečují.
             </p>
             <p>
-              Již v prvních letech bylo schváleno nasazování ryb. Při prvním zarybnění bylo do Vltavy vpuštěno 35 000 živých jiker candáta, 20 000 okouní násady, 500 kg kapřího dorostu a 100 kg lína. Později si spolek pronajal rybníky v Kolodějích nad Lužnicí a v Čihovicích, čímž položil základní kámen pěstování vlastních násad.
+              Již v prvních letech bylo schváleno nasazování ryb. Při prvním zarybnění bylo do Vltavy vpuštěno 35 000 živých jiker candáta, 20 000 okouní násady, 500 kg kapřího dorostu a 100 kg lína. Později si spolek rybářů pronajal rybníky v Kolodějích nad Lužnicí a v Čihovicích, čímž položil základní kámen pěstování vlastních násad.
             </p>
 
-            <h3>20. a 30. léta - Růst i pohromy</h3>
+            <h3 className="clear-both">20. a 30. léta - Růst i pohromy</h3>
+            <div className="relative float-left mr-6 mb-6 w-64 p-2 bg-white shadow-xl border border-gray-100 rounded-sm -rotate-1 grayscale hover:grayscale-0 transition duration-500">
+              <img src="/images/history/tyn25.jpg" alt="Týn nad Vltavou 1925" className="w-full h-auto" />
+            </div>
             <p>
               V roce 1924 byl za předsedu zvolen Václav Svoboda a byl zakoupen první vlastní rybník od pana Bargra za dvě selata.
             </p>
@@ -45,7 +58,10 @@ export default function HistoriePage() {
               Rok 1929 přinesl oslavy 10 let trvání spolku – lovily se ryby o ceny jako salám, med a cigarety. Ve 30. letech, konkrétně roku 1934, se stal předsedou Josef Dufek. Začaly se hojně řešit otázky pytláctví, které se tvrdě trestalo, někdy i vězením.
             </p>
 
-            <h3>Válečná léta a budování revírů</h3>
+            <h3 className="clear-both">Válečná léta a budování revírů</h3>
+            <div className="relative float-right ml-6 mb-4 w-72 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-2 grayscale hover:grayscale-0 transition duration-500">
+              <img src="/images/history/hist1.jpg" alt="Staré časy" className="w-full h-auto" />
+            </div>
             <p>
               V únoru 1940 postihla spolek největší katastrofa, kdy odchod obrovských ledů doslova rozdrtil rybí obsádku. Začaly těžké roky fašistické okupace, během kterých rapidně rostlo pytláctví z důvodu hladu.
             </p>

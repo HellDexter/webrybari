@@ -10,38 +10,39 @@ export default function ReviryPage() {
     {
       id: "421 090",
       name: "VLTAVA 20 - KOŘENSKO",
-      specs: "10 km • 130 ha • Platí i pro členy MRS",
+      specs: "10 km • 130 ha (řeka 126 ha, pískovna 4 ha)",
       gps: "Z: 49°14‘26.804“N, 14°22‘45.168“E | K: 49°10‘54.067“N, 14°26‘44.971“E",
       mapCoords: {
         start: [49.2407788, 14.3792133] as [number, number],
         end: [49.1816852, 14.4458252] as [number, number],
       },
-      description: "Od hráze ponořeného stupně Kořensko až k tělesu hráze Hněvkovické nádrže a na Lužnickém rameni až po silniční most v Kolodějích nad Lužnicí. K revíru patří pískovna Nový Dvůr (4 ha) v k. ú. Hosty. Ostatní rybníky Nový Dvůr 1 a 2 do revíru nepatří!",
+      description: "Od hráze ponořeného stupně Kořensko až k tělesu hráze Hněvkovické nádrže a na Lužnickém rameni až po silniční most v Kolodějích nad Lužnicí (GPS 49°15‘9.541“N, 14°25‘13.191“E). K revíru patří pískovna Nový Dvůr (4 ha) v k. ú. Hosty. Ostatní rybníky Nový Dvůr 1 a 2 do revíru nepatří!",
       rules: [
         "Zákaz lovu ryb ve vyznačeném úseku 100 m pod hrází Hněvkovické přehrady.",
-        "Zákaz rybolovu v podjezí jezu v Hněvkovicích a v rozsahu plavební komory.",
+        "Zákaz rybolovu v podjezí jezu v Hněvkovicích a v rozsahu plavební komory na jezu v Hněvkovicích.",
+        "Zákaz rybolovu v čekacím stání v Neznašově.",
         "Zákaz používání klepadel a šplouchadel a označování krmných míst plovoucími předměty.",
         "Lov z plavidel a zavážení nástrah a návnad povoleno.",
-        "Na revíru platí také celosvazové a jihočeské územní povolenky."
+        "Na revíru platí také celosvazové a jihočeské územní povolenky (i pro členy MRS)."
       ],
-      warning: "Na pozemcích vodní nádrže je zakázáno kempování, rozdělávání ohňů a znečišťování přírody."
+      warning: "Na pozemcích vodní nádrže je zakázáno provádět terénní úpravy, stanování, kempování, rozdělávání ohňů a znečišťování přírody."
     },
     {
       id: "421 012",
       name: "LUŽNICE 1",
-      specs: "5 km • 15 ha • Platí i pro členy MRS",
+      specs: "5 km • 15 ha",
       gps: "Z: 49°15‘10.125“N, 14°25‘13.431“E | K: 49°16‘31.059“N, 14°26‘7.519“E",
       mapCoords: {
         start: [49.2528125, 14.4203975] as [number, number],
         end: [49.2752941, 14.4354219] as [number, number],
       },
-      description: "Přítok Vltavy. Od silničního mostu v Kolodějích nad Lužnicí až k jezu Červeného mlýna v k. ú. Nuzice.",
+      description: "Přítok Vltavy. Od silničního mostu v Kolodějích nad Lužnicí až k jezu Červeného mlýna v k. ú. Nuzice (GPS 49°16‘31.059“N, 14°26‘7.519“E).",
       rules: [
         "Borovanský potok je CHRO – lov ryb zakázán.",
         "Lov z plavidel na řece povolen.",
-        "Na revíru platí také celosvazové a jihočeské územní povolenky."
+        "Na revíru platí také celosvazové a jihočeské územní povolenky (i pro členy MRS)."
       ],
-      warning: "Na pozemcích vodní nádrže je zakázáno kempování a rozdělávání ohňů."
+      warning: "Na pozemcích vodní nádrže je zakázáno kempování, stanování a rozdělávání ohňů."
     },
     {
       id: "421 013",
@@ -52,10 +53,10 @@ export default function ReviryPage() {
         start: [49.2712447, 14.4508322] as [number, number],
         end: [49.2712447, 14.4508322] as [number, number],
       },
-      description: "Rybník Rytíř v k. ú. Nuzice. Samostatný revír s vlastním režimem.",
+      description: "Rybník Rytíř v k. ú. Nuzice (4 ha).",
       rules: [
-        "Lov ryb povolen pouze z hráze rybníka.",
-        "Lov z plavidel a zavážení nástrah zakázáno.",
+        "Zákaz lovu ryb z tělesa hráze rybníka.",
+        "Zákaz lovu ryb z plavidel a zavážení nástrah a návnad.",
         "Zákaz používání krmítek při lovu na položenou."
       ]
     },
@@ -71,6 +72,7 @@ export default function ReviryPage() {
       description: "Levostranný přítok Lužnice. Od ústí do Lužnice pod Bechyní až k pramenům.",
       rules: [
         "Celý revír je vyhlášen jako Chráněná rybí oblast (CHRO).",
+        "Rybníky ležící na toku do rybářského revíru nepatří.",
         "Lov ryb je zde celoročně zakázán."
       ]
     }

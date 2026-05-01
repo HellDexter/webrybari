@@ -118,13 +118,22 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
         </div>
         
         {/* Mobile menu button */}
+        {/* Moderní zelené mobilní menu tlačítko */}
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="p-2.5 text-gray-700 bg-gray-100 rounded-xl hover:bg-green-50 hover:text-green-600 transition-colors"
-            onClick={() => setMobileMenuOpen(true)}
+            className="group relative flex items-center gap-3 p-1.5 pr-5 rounded-2xl bg-green-600 text-white shadow-lg shadow-green-200/50 hover:bg-green-700 transition-all active:scale-95"
+            onClick={() => {
+              setMobileMenuOpen(true)
+              document.body.style.overflow = 'hidden'
+            }}
           >
-            <Menu className="h-6 w-6" />
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex flex-col items-center justify-center gap-1.5 overflow-hidden">
+              <span className="block w-5 h-0.5 bg-white rounded-full group-hover:w-6 transition-all duration-300"></span>
+              <span className="block w-6 h-0.5 bg-white rounded-full transition-all duration-300"></span>
+              <span className="block w-4 h-0.5 bg-white rounded-full group-hover:w-6 transition-all duration-300"></span>
+            </div>
+            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Menu</span>
           </button>
         </div>
 

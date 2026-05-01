@@ -97,7 +97,7 @@ export default function ReviryPage() {
                     <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
                       {revir.id}
                     </span>
-                    <h2 className="text-xl font-bold text-white">{revir.name}</h2>
+                    <h2 className="text-xl font-bold !text-white">{revir.name}</h2>
                   </div>
                   <div className="text-gray-400 text-sm flex items-center gap-2">
                     <MapPin className="w-4 h-4" />

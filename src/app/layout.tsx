@@ -24,11 +24,15 @@ export default async function RootLayout({
 
   let userProfile = null;
   if (user) {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('first_name, last_name, role')
       .eq('id', user.id)
       .single();
+
+    if (error) {
+      console.error('Chyba načítání profilu:', error);
+    }
     
     // Fallback pokud záznam v profiles ještě neexistuje
     userProfile = data || { 

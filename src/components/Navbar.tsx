@@ -144,6 +144,7 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
               <div className="flex items-center gap-2 text-sm text-gray-700 font-medium whitespace-nowrap bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
                 <User className="w-4 h-4 text-green-600" />
                 <span>{userProfile.first_name}</span>
+                <span className="text-[10px] text-gray-400 ml-1">({userProfile.role})</span>
               </div>
               
               {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (

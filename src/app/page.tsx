@@ -207,47 +207,62 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-6">
             {upcomingEvents && upcomingEvents.length > 0 ? (
               upcomingEvents.map((event) => (
-                <div key={event.id} className="group relative flex flex-col md:flex-row gap-6 md:items-center">
-                  {/* Datum - Kalendářový lístek */}
-                  <div className="flex-shrink-0 w-20 h-20 bg-white/10 rounded-2xl border border-white/10 flex flex-col items-center justify-center group-hover:bg-white group-hover:border-white transition-all duration-500">
-                    <span className="text-2xl font-black text-white group-hover:text-green-900 leading-none">
-                      {new Date(event.date).getDate()}
-                    </span>
-                    <span className="text-[10px] font-black text-green-400 uppercase tracking-widest mt-1 group-hover:text-green-800 transition-colors">
-                      {new Date(event.date).toLocaleDateString('cs-CZ', { month: 'short' }).replace('.', '')}
-                    </span>
-                  </div>
+                <Link 
+                  key={event.id} 
+                  href="/aktuality/kalendar"
+                  className="group block relative"
+                >
+                  <div className="relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/10 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-8 transition-all duration-500 hover:bg-white/15 hover:-translate-y-1 hover:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)]">
+                    
+                    {/* Zelený akcentní proužek na boku */}
+                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 group-hover:w-3 transition-all duration-500"></div>
 
-                  {/* Karta akce */}
-                  <div className="flex-grow bg-white/5 backdrop-blur-sm border border-white/5 p-6 md:p-8 rounded-[2rem] hover:bg-white/10 hover:border-white/20 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="space-y-2">
-                      <h3 className="text-xl md:text-2xl font-bold text-white">
-                        {event.title}
-                      </h3>
-                      <div className="flex flex-wrap gap-4 text-sm text-green-100/60 font-medium">
-                        <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg">
-                          <Clock className="w-4 h-4 text-green-400" /> 
-                          {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                        {event.location && (
-                          <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg">
-                            <MapPin className="w-4 h-4 text-green-400" /> 
-                            {event.location}
+                    {/* Datum - Moderní čistý styl */}
+                    <div className="flex-shrink-0 flex flex-col items-center justify-center min-w-[80px] border-r border-white/10 pr-8">
+                      <span className="text-4xl font-black text-white leading-none">
+                        {new Date(event.date).getDate()}
+                      </span>
+                      <span className="text-xs font-black text-green-500 uppercase tracking-widest mt-2">
+                        {new Date(event.date).toLocaleDateString('cs-CZ', { month: 'short' }).replace('.', '')}
+                      </span>
+                    </div>
+
+                    {/* Informace o akci */}
+                    <div className="flex-grow space-y-4">
+                      <div className="space-y-1">
+                        <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                          {event.title}
+                        </h3>
+                        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+                          <div className="flex items-center gap-2.5 text-gray-400 font-medium">
+                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                              <Clock className="w-4 h-4 text-green-500" />
+                            </div>
+                            {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
                           </div>
-                        )}
+                          {event.location && (
+                            <div className="flex items-center gap-2.5 text-gray-400 font-medium">
+                              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                                <MapPin className="w-4 h-4 text-green-500" />
+                              </div>
+                              {event.location}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="hidden md:block">
-                      <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white transition-all duration-500">
-                        <ArrowRight className="w-5 h-5 text-white group-hover:text-green-900" />
+                    {/* Interaktivní prvek na pravé straně */}
+                    <div className="flex-shrink-0">
+                      <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-green-600 group-hover:border-green-500 transition-all duration-500">
+                        <ArrowRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))
             ) : (
               <div className="py-12 px-8 bg-white/5 rounded-3xl border border-white/10 text-center">

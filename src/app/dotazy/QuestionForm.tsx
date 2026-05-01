@@ -5,10 +5,13 @@ import { submitQuestion } from "./actions";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import Script from "next/script";
 
-export default function QuestionForm() {
+export default function QuestionForm({ siteKey }: { siteKey?: string }) {
   const [isPending, setIsPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Fallback pro případ, že siteKey nepřišel jako prop, ale je v env (pro jistotu)
+  const activeSiteKey = siteKey || process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   async function onSubmit(formData: FormData) {
     setIsPending(true);
@@ -107,17 +110,10 @@ export default function QuestionForm() {
       <div className="mb-6 flex flex-col items-center md:items-start">
         <div 
           className="cf-turnstile" 
-          data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          data-sitekey={activeSiteKey}
           data-theme="light"
         ></div>
-        {!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-          <p className="text-[10px] text-red-400 mt-1">Debug: Chybí SITE_KEY ve Vercelu</p>
-        )}
       </div>
-
-      <script dangerouslySetInnerHTML={{
-        __html: `console.log("Turnstile Site Key status:", "${process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? 'Nastaven' : 'CHYBÍ'}");`
-      }} />
 
       {/* Ochrana proti robotům (Honeypot) */}
       <div className="hidden" aria-hidden="true">

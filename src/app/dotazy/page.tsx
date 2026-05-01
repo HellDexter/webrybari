@@ -27,6 +27,9 @@ export default async function DotazyPage() {
     });
   };
 
+  // Načteme Turnstile site key přímo na serveru
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
   return (
     <div className="bg-gray-50 py-16 sm:py-24 flex-grow">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -48,7 +51,7 @@ export default async function DotazyPage() {
           
           {/* Formulář */}
           <div>
-            <QuestionForm />
+            <QuestionForm siteKey={turnstileSiteKey} />
           </div>
 
           {/* Seznam zodpovězených dotazů */}

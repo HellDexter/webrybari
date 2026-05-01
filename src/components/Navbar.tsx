@@ -75,35 +75,40 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
   }, [])
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-white'}`}>
-      {/* Horní informační lišta - nyní kompaktnější a v prémiovém stylu */}
-      <AnimatePresence>
-        {!isScrolled && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="bg-green-950 text-white overflow-hidden hidden md:block border-b border-white/5"
-          >
-            <div className="mx-auto max-w-7xl px-8 py-2.5 flex justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
-              <div className="flex gap-10">
-                <div className="flex items-center gap-2.5">
-                  <MapPin className="w-3.5 h-3.5 text-green-500" />
-                  <span>Zadní Podskalí 773, Týn n. Vlt.</span>
-                </div>
-                <a href="tel:+420724034501" className="flex items-center gap-2.5 hover:text-white transition-colors">
-                  <Phone className="w-3.5 h-3.5 text-green-500" />
-                  <span>+420 724 034 501</span>
-                </a>
-              </div>
-              <a href="mailto:info@rybarityn.cz" className="flex items-center gap-2.5 hover:text-white transition-colors">
-                <Mail className="w-3.5 h-3.5 text-green-500" />
-                <span>info@rybarityn.cz</span>
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <header 
+      className={`sticky top-0 z-50 transition-all duration-500 ${
+        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-white'
+      }`}
+    >
+      {/* Horní brandová linka */}
+      <div className="h-1 w-full bg-green-600"></div>
+
+      {/* Horní informační lišta - skryta na mobilu */}
+      <div className={`hidden sm:block bg-green-600 text-white transition-all duration-300 overflow-hidden ${isScrolled ? 'h-0 opacity-0' : 'h-auto py-2.5'}`}>
+        <div className="mx-auto max-w-7xl px-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] font-black uppercase tracking-widest">
+          <div className="flex items-center gap-6">
+            <a href="mailto:rybari.tyn@seznam.cz" className="flex items-center gap-2 hover:text-green-100 transition-colors">
+              <Mail className="w-3.5 h-3.5" /> <span>rybari.tyn@seznam.cz</span>
+            </a>
+            <span className="hidden sm:inline w-1 h-1 rounded-full bg-white/30"></span>
+            <a href="tel:+420724034501" className="flex items-center gap-2 hover:text-green-100 transition-colors">
+              <Phone className="w-3.5 h-3.5" /> +420 724 034 501
+            </a>
+          </div>
+          <div className="flex items-center gap-6">
+             <div className="hidden md:flex items-center gap-2 text-white/90 font-medium">
+               <MapPin className="w-3.5 h-3.5" /> Nábřeží Míru 312, Týn nad Vltavou
+             </div>
+             <div className="flex items-center gap-4">
+               <a href="https://www.facebook.com/rybari.tyn" target="_blank" rel="noopener noreferrer" className="hover:scale-125 transition-transform">
+                 <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24" aria-hidden="true">
+                   <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                 </svg>
+               </a>
+             </div>
+          </div>
+        </div>
+      </div>
 
       <nav className={`mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 transition-all duration-500 ${isScrolled ? 'py-2' : 'py-4'}`} aria-label="Global">
         <div className="flex lg:flex-1">
@@ -117,27 +122,24 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
           </Link>
         </div>
         
-        {/* Mobile menu button */}
-        {/* Moderní zelené mobilní menu tlačítko */}
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="group relative flex items-center gap-3 p-1.5 pr-5 rounded-2xl bg-green-600 text-white shadow-lg shadow-green-200/50 hover:bg-green-700 transition-all active:scale-95"
+            className="group relative flex items-center gap-2.5 p-1.5 pr-4 rounded-xl bg-green-50/80 backdrop-blur-sm border border-green-100 text-green-700 hover:bg-green-100 transition-all active:scale-90 active:bg-green-200 duration-200"
             onClick={() => {
               setMobileMenuOpen(true)
               document.body.style.overflow = 'hidden'
             }}
           >
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex flex-col items-center justify-center gap-1.5 overflow-hidden">
-              <span className="block w-5 h-0.5 bg-white rounded-full group-hover:w-6 transition-all duration-300"></span>
-              <span className="block w-6 h-0.5 bg-white rounded-full transition-all duration-300"></span>
-              <span className="block w-4 h-0.5 bg-white rounded-full group-hover:w-6 transition-all duration-300"></span>
+            <div className="w-9 h-9 bg-white rounded-lg flex flex-col items-center justify-center gap-1 shadow-sm border border-green-100 group-hover:border-green-300 transition-colors">
+              <span className="block w-4 h-0.5 bg-green-600 rounded-full group-hover:w-5 transition-all"></span>
+              <span className="block w-5 h-0.5 bg-green-600 rounded-full transition-all"></span>
+              <span className="block w-3 h-0.5 bg-green-600 rounded-full group-hover:w-5 transition-all"></span>
             </div>
-            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Menu</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Menu</span>
           </button>
         </div>
 
-        {/* Desktop menu */}
         <div className="hidden lg:flex lg:gap-x-2">
           <Link 
             href="/" 
@@ -158,7 +160,6 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                 <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${activeDropdown === navItem.name ? 'rotate-180 text-green-500' : 'text-gray-300'}`} />
               </button>
 
-              {/* Mega-menu Dropdown */}
               <AnimatePresence>
                 {activeDropdown === navItem.name && (
                   <motion.div 
@@ -233,7 +234,7 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
         </div>
       </nav>
 
-      {/* Mobile menu - Definitivní fix pozice a scrollování */}
+      {/* Mobile menu panel */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
@@ -241,11 +242,9 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[9999] lg:hidden"
-            // Vynucené blokování scrollu na pozadí při otevřeném menu
             onViewportEnter={() => document.body.style.overflow = 'hidden'}
             onViewportLeave={() => document.body.style.overflow = 'auto'}
           >
-            {/* Tmavý podklad (Overlay) přes celé okno */}
             <div 
               className="fixed inset-0 bg-gray-950/70 backdrop-blur-lg" 
               onClick={() => {
@@ -254,7 +253,6 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
               }}
             ></div>
             
-            {/* Bílý panel menu - fixní na pravé straně s h-full */}
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -262,13 +260,12 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-white shadow-[0_0_50px_rgba(0,0,0,0.3)] flex flex-col h-[100dvh] overflow-hidden"
             >
-              {/* Hlavička menu - pevná */}
               <div className="flex-none px-6 py-6 border-b border-gray-100 flex items-center justify-between bg-white">
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="text-xl font-black text-gray-900 leading-none">
                     ČRS MO <span className="text-green-600">Týn</span>
                   </span>
-                  <span className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 font-sans">Navigace webu</span>
+                  <span className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Navigace webu</span>
                 </div>
                 <button
                   type="button"
@@ -282,29 +279,29 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                 </button>
               </div>
               
-              {/* Scrollovatelný obsah menu */}
               <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10 overscroll-contain">
                 <Link 
                   href="/" 
-                  className="block text-lg font-black text-white bg-green-600 p-5 rounded-2xl shadow-xl shadow-green-100 text-center" 
+                  className="flex flex-col rounded-2xl p-5 transition-all bg-gray-50 border border-gray-100 active:bg-green-50 active:border-green-100 group text-left" 
                   onClick={() => {
                     setMobileMenuOpen(false)
                     document.body.style.overflow = 'auto'
                   }}
                 >
-                  HLAVNÍ STRANA
+                  <span className="text-lg font-black text-gray-900 group-active:text-green-600 transition-colors">Hlavní strana</span>
+                  <span className="text-xs font-medium text-gray-400">Zpět na úvodní obrazovku</span>
                 </Link>
                 
-                <div className="space-y-8 pb-10">
+                <div className="space-y-8 pb-4">
                   {navigation.map((navItem) => (
                     <div key={navItem.name} className="space-y-3">
-                      <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest pl-4">{navItem.name}</div>
+                      <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest pl-4 text-left">{navItem.name}</div>
                       <div className="space-y-1">
                         {navItem.items.map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
-                            className="flex flex-col rounded-2xl p-4 transition-all active:bg-green-50 border border-transparent"
+                            className="flex flex-col rounded-2xl p-4 transition-all active:bg-green-50 border border-transparent text-left"
                             onClick={() => {
                               setMobileMenuOpen(false)
                               document.body.style.overflow = 'auto'
@@ -317,54 +314,87 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                       </div>
                     </div>
                   ))}
+                </div>
 
-                  {/* Uživatelská sekce v mobilu */}
-                  <div className="pt-8 border-t border-gray-100">
-                    {userProfile ? (
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
-                          <UserCircle className="w-8 h-8 text-green-600" />
-                          <div className="flex flex-col">
-                             <span className="font-bold text-gray-900">{userProfile.first_name}</span>
-                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">{userProfile.role}</span>
-                          </div>
+                <div className="pt-8 border-t border-gray-100">
+                  {userProfile ? (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
+                        <UserCircle className="w-8 h-8 text-green-600" />
+                        <div className="flex flex-col text-left">
+                           <span className="font-bold text-gray-900">{userProfile.first_name}</span>
+                           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">{userProfile.role}</span>
                         </div>
-                        
-                        {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
-                          <Link 
-                            href="/admin" 
-                            className="block w-full py-5 text-center text-white bg-green-600 font-black rounded-2xl shadow-lg shadow-green-100"
-                            onClick={() => {
-                              setMobileMenuOpen(false)
-                              document.body.style.overflow = 'auto'
-                            }}
-                          >
-                            ADMINISTRACE
-                          </Link>
-                        )}
-                        
-                        <form action={logout}>
-                          <button 
-                            type="submit" 
-                            className="w-full py-4 text-red-600 font-bold active:bg-red-50 rounded-2xl"
-                            onClick={() => document.body.style.overflow = 'auto'}
-                          >
-                            Odhlásit se
-                          </button>
-                        </form>
                       </div>
-                    ) : (
-                      <Link 
-                        href="/login" 
-                        className="block w-full py-5 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
-                        onClick={() => {
-                          setMobileMenuOpen(false)
-                          document.body.style.overflow = 'auto'
-                        }}
-                      >
-                        PŘIHLÁSIT SE
-                      </Link>
-                    )}
+                      {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
+                        <Link 
+                          href="/admin" 
+                          className="block w-full py-5 text-center text-white bg-green-600 font-black rounded-2xl shadow-lg shadow-green-100"
+                          onClick={() => {
+                            setMobileMenuOpen(false)
+                            document.body.style.overflow = 'auto'
+                          }}
+                        >
+                          ADMINISTRACE
+                        </Link>
+                      )}
+                      <form action={logout}>
+                        <button 
+                          type="submit" 
+                          className="w-full py-4 text-red-600 font-bold active:bg-red-50 rounded-2xl"
+                          onClick={() => document.body.style.overflow = 'auto'}
+                        >
+                          Odhlásit se
+                        </button>
+                      </form>
+                    </div>
+                  ) : (
+                    <Link 
+                      href="/login" 
+                      className="block w-full py-5 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
+                      onClick={() => {
+                        setMobileMenuOpen(false)
+                        document.body.style.overflow = 'auto'
+                      }}
+                    >
+                      PŘIHLÁSIT SE
+                    </Link>
+                  )}
+                </div>
+
+                <div className="pt-10 border-t border-gray-100 space-y-6 pb-12">
+                  <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest pl-4 text-left">Kontakt a sítě</div>
+                  <div className="grid grid-cols-1 gap-3 px-2">
+                    <a href="tel:+420724034501" className="flex items-center gap-4 p-4 bg-green-600 text-white rounded-2xl shadow-lg shadow-green-100 active:scale-95 transition-all text-left">
+                      <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Phone className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-green-100 uppercase tracking-tight">Zavolejte nám</span>
+                        <span className="text-base font-black tracking-tight">+420 724 034 501</span>
+                      </div>
+                    </a>
+                    <a href="mailto:rybari.tyn@seznam.cz" className="flex items-center gap-4 p-4 bg-gray-50 border border-gray-100 text-gray-900 rounded-2xl active:bg-green-50 active:border-green-100 transition-all text-left">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                        <Mail className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Napište nám</span>
+                        <span className="text-sm font-bold">rybari.tyn@seznam.cz</span>
+                      </div>
+                    </a>
+                    <a href="https://www.facebook.com/rybari.tyn" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 bg-[#1877F2] text-white rounded-2xl shadow-lg shadow-blue-100 active:scale-95 transition-all text-left">
+                      <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                          <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm font-bold">Facebook</span>
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3 p-4 text-gray-400 text-left">
+                    <MapPin className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    <span className="text-[11px] font-medium leading-tight">Nábřeží Míru 312, Týn nad Vltavou</span>
                   </div>
                 </div>
               </div>

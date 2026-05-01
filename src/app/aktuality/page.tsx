@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
-import { CalendarDays, Fish, ArrowRight } from 'lucide-react'
+import { CalendarDays, Fish, ArrowRight, Shield, AlertTriangle } from 'lucide-react'
 
 export default async function AktualityPage({ 
   searchParams 
@@ -17,32 +17,34 @@ export default async function AktualityPage({
     .select('*')
     .order('name')
 
-  // 2. Načtení článků
-  let query = supabase
+  // 2. Načtení dat (články i hlášení stráže)
+  const articlesPromise = supabase
     .from('articles')
     .select('*, category:categories(name)')
     .eq('published', true)
     .order('created_at', { ascending: false })
 
+  const guardPromise = supabase
+    .from('guard_messages')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  const [articlesRes, guardRes] = await Promise.all([articlesPromise, guardPromise])
+
+  // 3. Sjednocení a filtrace
+  let allContent = [
+    ...(articlesRes.data || []).map(a => ({ ...a, type: 'article' })),
+    ...(guardRes.data || []).map(g => ({ ...g, type: 'guard' }))
+  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+  // Aplikace filtrů
   if (categoryParam) {
-    // Pokud máme UUID, filtrujeme přímo
-    if (categoryParam.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-      query = query.eq('category_id', categoryParam)
+    if (categoryParam === 'straz') {
+      allContent = allContent.filter(item => item.type === 'guard')
     } else {
-      // Pokud máme název, hledáme PŘESNOU shodu (ignore case)
-      const { data: catData } = await supabase
-        .from('categories')
-        .select('id')
-        .ilike('name', categoryParam) // Bez %, aby to byla přesná shoda
-        .maybeSingle()
-      
-      if (catData) {
-        query = query.eq('category_id', catData.id)
-      }
+      allContent = allContent.filter(item => item.type === 'article' && item.category_id === categoryParam)
     }
   }
-
-  const { data: articles } = await query
 
   return (
     <div className="bg-gray-50 min-h-screen py-16 sm:py-24">
@@ -66,6 +68,19 @@ export default async function AktualityPage({
           >
             Všechno
           </Link>
+          
+          {/* Virtuální kategorie pro stráž */}
+          <Link
+            href="/aktuality?kategorie=straz"
+            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
+              categoryParam === 'straz'
+                ? 'bg-red-600 text-white shadow-lg shadow-red-200' 
+                : 'bg-white text-red-600 hover:bg-red-50 border border-red-100'
+            }`}
+          >
+            <Shield className="w-4 h-4" /> Rybářská stráž
+          </Link>
+
           {categories?.map((cat) => (
             <Link
               key={cat.id}
@@ -82,42 +97,70 @@ export default async function AktualityPage({
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {articles && articles.length > 0 ? (
-            articles.map((article) => (
-              <article key={article.id} className="group flex flex-col bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
-                <Link href={`/aktuality/${article.slug}`} className="relative aspect-[16/10] overflow-hidden block">
-                  {article.featured_image_url ? (
-                    <img src={article.featured_image_url} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  ) : (
-                    <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
-                      <Fish className="w-12 h-12" />
+          {allContent && allContent.length > 0 ? (
+            allContent.map((item) => (
+              <article key={item.id} className="flex flex-col items-start group">
+                <div className="relative w-full aspect-[16/10] overflow-hidden rounded-[2.5rem] bg-gray-100 mb-8 shadow-lg">
+                  {item.type === 'guard' ? (
+                    <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                      <img 
+                        src={item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : '/images/guard_default.png'} 
+                        className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" 
+                        alt="" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-red-950/40 to-transparent"></div>
                     </div>
+                  ) : (
+                    <img
+                      src={item.featured_image_url || '/placeholder-news.jpg'}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
                   )}
-                  <div className="absolute top-5 left-5">
-                    <span className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-green-700 shadow-sm border border-white">
-                      {article.category?.name || 'Aktualita'}
-                    </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Badge */}
+                  <div className="absolute top-6 left-6">
+                    {item.type === 'guard' ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-1.5 text-xs font-black text-white shadow-lg">
+                        <Shield className="w-3.5 h-3.5" /> Rybářská stráž
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full bg-white px-4 py-1.5 text-xs font-black text-gray-900 shadow-lg border border-white">
+                        {item.category?.name || 'Aktualita'}
+                      </span>
+                    )}
                   </div>
-                </Link>
-                <div className="p-8 flex flex-col flex-grow">
-                  <div className="flex items-center gap-3 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
-                    <CalendarDays className="w-4 h-4 text-green-500" />
-                    {new Date(article.created_at).toLocaleDateString('cs-CZ')}
+                </div>
+                
+                <div className="max-w-xl flex flex-col flex-grow w-full px-2">
+                  <div className="flex items-center gap-x-4 text-xs font-bold text-gray-400 mb-4 uppercase tracking-widest">
+                    <div className="flex items-center gap-2">
+                      <CalendarDays className="w-4 h-4 text-green-500" />
+                      {new Date(item.created_at).toLocaleDateString('cs-CZ')}
+                    </div>
+                    {item.type === 'guard' && item.is_important && (
+                      <span className="text-red-600 flex items-center gap-1">
+                        <AlertTriangle className="w-3.5 h-3.5" /> Důležité
+                      </span>
+                    )}
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-snug mb-4">
-                    <Link href={`/aktuality/${article.slug}`}>{article.title}</Link>
+                  <h3 className="text-2xl font-black leading-snug text-gray-900 group-hover:text-green-600 transition-colors mb-4">
+                    <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}>
+                      {item.title}
+                    </Link>
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed mb-8 flex-grow">
-                    {article.content
-                      ?.replace(/<[^>]*>?/gm, '')
-                      .replace(/&nbsp;/g, ' ')
-                      .substring(0, 160)}...
+                  <p className="line-clamp-3 text-base leading-relaxed text-gray-500 font-medium mb-8 flex-grow">
+                    {item.type === 'guard' 
+                      ? item.content 
+                      : item.perex || (item.content?.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[^;]+;/g, ' ').substring(0, 160) + '...')}
                   </p>
+                  
                   <Link 
-                    href={`/aktuality/${article.slug}`} 
-                    className="inline-flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 group/link"
+                    href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors group/link"
                   >
-                    Číst celý článek
+                    {item.type === 'guard' ? 'Více o hlášení' : 'Číst celý článek'} 
                     <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                   </Link>
                 </div>
@@ -129,7 +172,7 @@ export default async function AktualityPage({
                 <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Fish className="w-10 h-10 text-gray-300" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Žádné články nenalezeny</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Žádné zprávy nenalezeny</h3>
                 <p className="text-gray-500">Zkuste vybrat jinou kategorii nebo se vraťte později.</p>
               </div>
             </div>

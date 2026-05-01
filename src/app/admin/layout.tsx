@@ -37,13 +37,3 @@ export default async function AdminLayout({
     </div>
   )
 }
-
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="p-8">
-          {children}
-        </div>
-      </main>
-    </div>
-  )
-}

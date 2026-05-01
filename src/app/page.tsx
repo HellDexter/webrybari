@@ -88,10 +88,10 @@ export default async function Home() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 -mt-24 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { img: "/images/home/reviry.png?v=2", title: "Naše revíry", desc: "Mapy a popisy lokalit", href: "/pro-rybare/reviry", accent: "bg-blue-50" },
-            { img: "/images/home/rad.png?v=2", title: "Rybářský řád", desc: "Aktuální pravidla lovu", href: "/pro-rybare/rad", accent: "bg-green-50" },
-            { img: "/images/home/povolenky.png?v=2", title: "Povolenky", desc: "Ceník a výdejní místa", href: "/clenstvi/ceny", accent: "bg-amber-50" },
-            { img: "/images/home/dotazy.png?v=2", title: "Časté dotazy", desc: "Vše, co potřebujete vědět", href: "/dotazy", accent: "bg-purple-50" },
+            { img: "/images/home/reviry_clean.png", title: "Naše revíry", desc: "Mapy a popisy lokalit", href: "/pro-rybare/reviry", accent: "bg-blue-50" },
+            { img: "/images/home/rad_clean.png", title: "Rybářský řád", desc: "Aktuální pravidla lovu", href: "/pro-rybare/rad", accent: "bg-green-50" },
+            { img: "/images/home/povolenky_clean.png", title: "Povolenky", desc: "Ceník a výdejní místa", href: "/clenstvi/ceny", accent: "bg-amber-50" },
+            { img: "/images/home/dotazy_clean.png", title: "Časté dotazy", desc: "Vše, co potřebujete vědět", href: "/dotazy", accent: "bg-purple-50" },
           ].map((item, i) => (
             <Link 
               key={i} 

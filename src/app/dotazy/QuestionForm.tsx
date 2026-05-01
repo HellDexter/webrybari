@@ -113,9 +113,10 @@ export default function QuestionForm({ siteKey }: { siteKey?: string }) {
           data-sitekey={activeSiteKey}
           data-theme="light"
         ></div>
-        <div className="mt-2 p-1 bg-gray-100 rounded text-[10px] text-gray-400 font-mono">
-          Debug ID: {activeSiteKey ? `${activeSiteKey.substring(0, 5)}...` : 'PRÁZDNÉ / NENALEZENO'}
-        </div>
+        <Script 
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js" 
+          strategy="lazyOnload"
+        />
       </div>
 
       {/* Ochrana proti robotům (Honeypot) */}

@@ -84,10 +84,10 @@ export default function Footer() {
 
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-12 pt-8 border-t border-green-600/30 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500">
             &copy; {new Date().getFullYear()} ČRS MO Týn nad Vltavou. Všechna práva vyhrazena. 
-            <span className="ml-4 border-l border-white/10 pl-4">
+            <span className="ml-4 border-l border-green-600/40 pl-4">
               Webdesign a vývoj: <a href="mailto:pbertelmann@gmail.com" className="text-gray-400 hover:text-green-500 transition-colors">Pavel Bertelmann</a>
             </span>
           </p>

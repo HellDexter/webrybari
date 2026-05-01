@@ -33,12 +33,12 @@ export default async function Home() {
     .order('created_at', { ascending: false })
     .limit(3);
 
-  // Spojení a seřazení novinek
+  // Spojení a seřazení novinek - Zvýšeno na 5 kusů pro moderní grid
   const allNews = [
     ...(articles || []).map(a => ({ ...a, type: 'article' })),
     ...(guardMessages || []).map(g => ({ ...g, type: 'guard' }))
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-   .slice(0, 3);
+   .slice(0, 5);
 
   // 2. Načtení 3 nejnovějších alb
   const { data: latestAlbums } = await supabase
@@ -137,73 +137,85 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {allNews.map((item) => (
-              <article key={item.id} className="flex flex-col items-start group">
-                <div className="relative w-full aspect-[16/10] overflow-hidden rounded-[2.5rem] bg-gray-100 mb-8 shadow-lg">
-                  {item.type === 'guard' ? (
-                    <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                      <img 
-                        src={item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : '/images/guard_default.png'} 
-                        className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" 
-                        alt="" 
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-red-950/40 to-transparent"></div>
-                    </div>
-                  ) : (
-                    <img
-                      src={item.featured_image_url || '/placeholder-news.jpg'}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <div className="absolute top-6 left-6">
-                    {item.type === 'guard' ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-1.5 text-xs font-black text-white shadow-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Hlavní velká novinka */}
+            {allNews[0] && (
+              <div className="lg:col-span-2 relative h-[500px] group overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100">
+                <Link href={allNews[0].type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${allNews[0].id}`} className="absolute inset-0 z-10" />
+                <img 
+                  src={allNews[0].type === 'guard' 
+                    ? (allNews[0].image_urls?.[0] || '/images/guard_default.png')
+                    : (allNews[0].featured_image_url || '/placeholder-news.jpg')
+                  } 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  alt="" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-900/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
+                  <div className="flex items-center gap-3 mb-4">
+                    {allNews[0].type === 'guard' ? (
+                      <span className="bg-red-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg">
                         <Shield className="w-3.5 h-3.5" /> Rybářská stráž
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-full bg-white px-4 py-1.5 text-xs font-black text-gray-900 shadow-lg">
-                        {item.category?.name || 'Aktualita'}
+                      <span className="bg-green-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        {allNews[0].category?.name || 'Aktualita'}
                       </span>
                     )}
+                    <time className="text-white/60 text-xs font-bold">{new Date(allNews[0].created_at).toLocaleDateString('cs-CZ')}</time>
                   </div>
-                </div>
-                
-                <div className="max-w-xl flex flex-col flex-grow">
-                  <div className="flex items-center gap-x-4 text-xs font-bold text-gray-400 mb-4">
-                    <time dateTime={item.created_at}>
-                      {new Date(item.created_at).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </time>
-                    {item.type === 'guard' && item.is_important && (
-                      <span className="text-red-600 flex items-center gap-1 uppercase tracking-widest text-[10px]">
-                        <AlertTriangle className="w-3.5 h-3.5" /> Důležité
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-2xl font-black leading-snug text-gray-900 group-hover:text-green-600 transition-colors mb-4">
-                    <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}>
-                      {item.title}
-                    </Link>
+                  <h3 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4 group-hover:text-green-400 transition-colors">
+                    {allNews[0].title}
                   </h3>
-                  <p className="line-clamp-3 text-base leading-relaxed text-gray-500 font-medium mb-6 flex-grow">
-                    {item.type === 'guard' 
-                      ? item.content 
-                      : item.perex || (item.content?.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[^;]+;/g, ' ').substring(0, 160) + '...')}
+                  <p className="text-white/70 line-clamp-2 text-lg font-medium max-w-xl">
+                    {allNews[0].type === 'guard' 
+                      ? allNews[0].content 
+                      : (allNews[0].perex || allNews[0].content?.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[^;]+;/g, ' ').substring(0, 160) + '...')}
                   </p>
-                  
-                  <Link 
-                    href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors group/link"
-                  >
-                    {item.type === 'guard' ? 'Více informací' : 'Číst celý článek'} 
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                  </Link>
                 </div>
-              </article>
-            ))}
+              </div>
+            )}
+
+            {/* Boční seznam menších novinek */}
+            <div className="space-y-6">
+              {allNews.slice(1).map((item) => (
+                <article key={item.id} className="group relative flex items-center gap-5 p-2 rounded-2xl hover:bg-gray-50 transition-all duration-300">
+                  <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-2xl bg-gray-100 shadow-sm border border-gray-100">
+                    <img 
+                      src={item.type === 'guard' 
+                        ? (item.image_urls?.[0] || '/images/guard_default.png')
+                        : (item.featured_image_url || '/placeholder-news.jpg')
+                      } 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      alt="" 
+                    />
+                    {item.type === 'guard' && (
+                      <div className="absolute inset-0 bg-red-600/5 flex items-center justify-center">
+                         <Shield className="w-6 h-6 text-red-600 opacity-20" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className={`text-[9px] font-black uppercase tracking-widest ${item.type === 'guard' ? 'text-red-600' : 'text-green-600'}`}>
+                        {item.type === 'guard' ? 'Stráž' : (item.category?.name || 'Aktualita')}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                      <time className="text-[10px] font-bold text-gray-400">{new Date(item.created_at).toLocaleDateString('cs-CZ')}</time>
+                    </div>
+                    <h4 className="text-sm font-black text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2 leading-snug">
+                      <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}>
+                        {item.title}
+                      </Link>
+                    </h4>
+                  </div>
+                </article>
+              ))}
+              
+              <Link href="/aktuality" className="block text-center py-4 text-xs font-black text-green-600 hover:text-green-700 bg-green-50 rounded-2xl transition-colors mt-4">
+                Zobrazit vše <ArrowRight className="inline w-3 h-3 ml-1" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -20,11 +20,12 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     notFound()
   }
 
-  const rawContent = article.content ? article.content.replace(/&nbsp;|\u00A0/g, ' ') : ''
+  // Zpracování obsahu - bezpečnější verze
+  const rawContent = (article && article.content) ? String(article.content).replace(/&nbsp;|\u00A0/g, ' ') : ''
   const sanitizedContent = sanitizeHtml(rawContent)
 
-  // Funkce pro opravu cest k obrázkům v textu (pokud chybí plná URL)
   const fixImagePaths = (html: string) => {
+    if (!html) return ''
     const storageUrl = 'https://vgzxyaqqmjvyzedkrsvr.supabase.co/storage/v1/object/public/media/'
     return html.replace(/<img[^>]+src="([^">]+)"/g, (match, src) => {
       if (!src.startsWith('http') && !src.startsWith('data:')) {
@@ -36,18 +37,22 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
   const finalContent = fixImagePaths(sanitizedContent)
 
-  // Volitelně se pokusíme načíst autora (pokud selže kvůli RLS, nevadí to)
+  // Volitelně se pokusíme načíst autora
   let authorName = null
-  if (article.author_id) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('first_name, last_name')
-      .eq('id', article.author_id)
-      .maybeSingle()
-    
-    if (profile) {
-      authorName = `${profile.first_name} ${profile.last_name}`
+  try {
+    if (article && article.author_id) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('id', article.author_id)
+        .maybeSingle()
+      
+      if (profile) {
+        authorName = `${profile.first_name} ${profile.last_name}`
+      }
     }
+  } catch (e) {
+    console.error('Chyba při načítání autora:', e)
   }
 
   return (

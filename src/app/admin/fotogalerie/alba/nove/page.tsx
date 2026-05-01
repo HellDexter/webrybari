@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import NewAlbumForm from './NewAlbumForm'
+import AlbumDetailsForm from '../AlbumDetailsForm'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
@@ -18,11 +18,11 @@ export default async function NewAlbumPage() {
         <Link href="/admin/fotogalerie" className="p-2 text-gray-500 hover:text-gray-900 bg-white rounded-lg border border-gray-200 shadow-sm transition">
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Nové album</h1>
+        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Nové album</h1>
       </div>
 
       <div className="max-w-3xl">
-        <NewAlbumForm categories={categories || []} />
+        <AlbumDetailsForm categories={categories || []} />
       </div>
     </div>
   )

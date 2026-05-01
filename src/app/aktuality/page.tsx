@@ -39,10 +39,16 @@ export default async function AktualityPage({
 
   // Aplikace filtrů
   if (categoryParam) {
-    if (categoryParam === 'straz') {
+    if (categoryParam.toLowerCase() === 'straz') {
       allContent = allContent.filter(item => item.type === 'guard')
     } else {
-      allContent = allContent.filter(item => item.type === 'article' && item.category_id === categoryParam)
+      allContent = allContent.filter(item => {
+        if (item.type !== 'article') return false
+        // Kontrola podle ID nebo podle názvu kategorie
+        const matchesId = item.category_id === categoryParam
+        const matchesName = item.category?.name?.toLowerCase() === categoryParam.toLowerCase()
+        return matchesId || matchesName
+      })
     }
   }
 

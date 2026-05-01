@@ -51,6 +51,38 @@ export async function createGallery(formData: FormData) {
   return { success: true, galleryId: data.id }
 }
 
+export async function updateGallery(id: string, formData: FormData) {
+  const { supabase } = await requireAdmin()
+  
+  const name = formData.get('name') as string
+  const slug = formData.get('slug') as string
+  const category_id = formData.get('category_id') as string
+  const event_date = formData.get('event_date') as string
+  const description = formData.get('description') as string
+
+  if (!name || !slug) return { error: 'Název a URL adresa jsou povinné.' }
+
+  const { error } = await supabase.from('galleries').update({
+    name,
+    slug,
+    category_id: category_id || null,
+    event_date: event_date || null,
+    description: description || null
+  }).eq('id', id)
+
+  if (error) {
+    console.error(error)
+    return { error: 'Nelze aktualizovat album. URL už možná existuje.' }
+  }
+
+  revalidatePath('/admin/fotogalerie')
+  revalidatePath(`/admin/fotogalerie/alba/${id}`)
+  revalidatePath('/fotogalerie')
+  revalidatePath(`/fotogalerie/${id}`)
+  
+  return { success: true }
+}
+
 export async function deleteGallery(id: string) {
   const { supabase } = await requireAdmin()
   

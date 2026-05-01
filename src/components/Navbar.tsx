@@ -39,6 +39,7 @@ const navigation = [
     name: 'Dění v organizaci',
     items: [
       { name: 'Všechny aktuality', href: '/aktuality' },
+      { name: 'Obecné zprávy', href: '/aktuality?kategorie=Obecné články a zprávy' },
       { name: 'Závody', href: '/aktuality?kategorie=Závody' },
       { name: 'Brigády', href: '/aktuality?kategorie=Brigády' },
       { name: 'Zarybňování', href: '/aktuality?kategorie=Zarybňování' },

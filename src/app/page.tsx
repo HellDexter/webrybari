@@ -56,12 +56,7 @@ export default async function Home() {
     .limit(3);
 
   if (eventsError) {
-    console.error('Chyba při načítání akcí:', {
-      zprava: eventsError.message,
-      detaily: eventsError.details,
-      kod: eventsError.code,
-      tip: eventsError.hint
-    })
+    console.error(`DETAL CHYBY AKCÍ -> Zpráva: ${eventsError.message} | Kód: ${eventsError.code} | Detaily: ${eventsError.details}`);
   }
 
   return (
@@ -106,25 +101,81 @@ export default async function Home() {
       </div>
 
       {/* Dashboard rozcestník */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 -mt-24 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 -mt-32 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { img: "/images/home/reviry_clean.png", title: "Naše revíry", desc: "Mapy a popisy lokalit", href: "/pro-rybare/reviry", accent: "bg-blue-50" },
-            { img: "/images/home/rad_clean.png", title: "Rybářský řád", desc: "Aktuální pravidla lovu", href: "/pro-rybare/rad", accent: "bg-green-50" },
-            { img: "/images/home/povolenky_clean.png", title: "Povolenky", desc: "Ceník a výdejní místa", href: "/clenstvi/ceny", accent: "bg-amber-50" },
-            { img: "/images/home/dotazy_clean.png", title: "Časté dotazy", desc: "Vše, co potřebujete vědět", href: "/dotazy", accent: "bg-purple-50" },
+            { 
+              img: "/images/home/reviry_clean.png", 
+              title: "Naše revíry", 
+              desc: "Mapy a detailní popisy všech lokalit", 
+              href: "/pro-rybare/reviry", 
+              color: "from-blue-500/10 to-cyan-500/5",
+              accent: "text-blue-600",
+              shadow: "hover:shadow-blue-500/20"
+            },
+            { 
+              img: "/images/home/rad_clean.png", 
+              title: "Rybářský řád", 
+              desc: "Aktuální pravidla a legislativa", 
+              href: "/pro-rybare/rad", 
+              color: "from-green-500/10 to-emerald-500/5",
+              accent: "text-green-600",
+              shadow: "hover:shadow-green-500/20"
+            },
+            { 
+              img: "/images/home/povolenky_clean.png", 
+              title: "Povolenky", 
+              desc: "Ceník, výdejní místa a termíny", 
+              href: "/clenstvi/ceny", 
+              color: "from-amber-500/10 to-orange-500/5",
+              accent: "text-amber-600",
+              shadow: "hover:shadow-amber-500/20"
+            },
+            { 
+              img: "/images/home/dotazy_clean.png", 
+              title: "Časté dotazy", 
+              desc: "Vše, co potřebujete vědět k lovu", 
+              href: "/dotazy", 
+              color: "from-purple-500/10 to-pink-500/5",
+              accent: "text-purple-600",
+              shadow: "hover:shadow-purple-500/20"
+            },
           ].map((item, i) => (
             <Link 
               key={i} 
               href={item.href} 
-              className="group bg-white p-10 rounded-[3rem] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] border border-gray-100/50 hover:border-green-500/30 transition-all duration-500 hover:-translate-y-4 flex flex-col items-center text-center"
+              className={`group relative bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-[0_15px_40px_-15px_rgba(0,0,0,0.1)] border border-white hover:border-gray-200 transition-all duration-500 hover:-translate-y-4 flex flex-col items-center text-center overflow-hidden ${item.shadow}`}
             >
-              <div className={`w-32 h-32 ${item.accent} rounded-full flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 relative`}>
-                 <div className="absolute inset-0 bg-white/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
-                 <img src={item.img} alt={item.title} className="w-24 h-24 object-contain relative z-10 drop-shadow-md" />
+              {/* Pozadí s gradientem na pozadí karty */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+              
+              {/* Dekorativní prvek na pozadí */}
+              <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/50 rounded-full blur-3xl group-hover:bg-white/80 transition-all duration-500"></div>
+
+              {/* Hlavní obrázek - teď mnohem větší a bez omezujícího kroužku */}
+              <div className="relative mb-8 h-48 flex items-center justify-center">
+                 <img 
+                    src={item.img} 
+                    alt={item.title} 
+                    className="w-40 h-40 object-contain transition-all duration-700 group-hover:scale-125 group-hover:rotate-3 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] group-hover:drop-shadow-[0_30px_50px_rgba(0,0,0,0.2)]" 
+                 />
               </div>
-              <h3 className="text-xl font-black text-gray-900 mb-2 group-hover:text-green-600 transition-colors">{item.title}</h3>
-              <p className="text-sm font-medium text-gray-500">{item.desc}</p>
+
+              <div className="relative z-10">
+                <h3 className={`text-2xl font-black text-gray-900 mb-3 transition-colors ${item.accent} group-hover:scale-105 duration-300`}>
+                  {item.title}
+                </h3>
+                <p className="text-sm font-semibold text-gray-500 leading-relaxed px-2">
+                  {item.desc}
+                </p>
+              </div>
+              
+              {/* Indikátor akce ve spodní části */}
+              <div className="mt-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                <span className={`text-[10px] font-black uppercase tracking-widest ${item.accent}`}>
+                  Zjistit více →
+                </span>
+              </div>
             </Link>
           ))}
         </div>

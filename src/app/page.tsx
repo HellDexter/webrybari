@@ -132,16 +132,13 @@ export default async function Home() {
               </div>
               <h2 className="text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Novinky z <span className="text-green-600">naší organizace</span></h2>
             </div>
-            <Link href="/aktuality" className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-colors bg-green-50 px-6 py-3 rounded-full">
-              Všechny zprávy <ArrowRight className="w-5 h-5" />
-            </Link>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Hlavní velká novinka */}
             {allNews[0] && (
               <div className="lg:col-span-2 relative h-[500px] group overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100">
-                <Link href={allNews[0].type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${allNews[0].id}`} className="absolute inset-0 z-10" />
+                <Link href={allNews[0].type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${allNews[0].slug}`} className="absolute inset-0 z-10" />
                 <img 
                   src={allNews[0].type === 'guard' 
                     ? (allNews[0].image_urls?.[0] || '/images/guard_default.png')
@@ -204,7 +201,7 @@ export default async function Home() {
                       <time className="text-[10px] font-bold text-gray-400">{new Date(item.created_at).toLocaleDateString('cs-CZ')}</time>
                     </div>
                     <h4 className="text-sm font-black text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2 leading-snug">
-                      <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}>
+                      <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.slug}`}>
                         {item.title}
                       </Link>
                     </h4>
@@ -310,7 +307,7 @@ export default async function Home() {
               </div>
               <h2 className="text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Naše <span className="text-green-600">fotogalerie</span></h2>
             </div>
-            <Link href="/aktuality/fotogalerie" className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-colors bg-white px-6 py-3 rounded-full shadow-sm border border-gray-100">
+            <Link href="/fotogalerie" className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-colors bg-white px-6 py-3 rounded-full shadow-sm border border-gray-100">
               Všechna alba <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -318,7 +315,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {latestAlbums && latestAlbums.length > 0 ? (
               latestAlbums.map((album) => (
-                <Link key={album.id} href={`/aktuality/fotogalerie/${album.id}`} className="group block">
+                <Link key={album.id} href={`/fotogalerie/${album.id}`} className="group block">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] shadow-lg mb-4">
                     <img
                       src={album.photos?.[0]?.image_url || '/placeholder-gallery.jpg'}
@@ -333,9 +330,11 @@ export default async function Home() {
                   </div>
                   <div className="px-4">
                     <h3 className="text-lg font-black text-gray-900 group-hover:text-green-600 transition-colors leading-tight mb-1">{album.title}</h3>
-                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
-                       {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
-                    </p>
+                    {album.event_date && new Date(album.event_date).getFullYear() > 1970 && (
+                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                        {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
+                      </p>
+                    )}
                   </div>
                 </Link>
               ))

@@ -47,13 +47,22 @@ export default async function Home() {
     .order('event_date', { ascending: false })
     .limit(3);
 
-  // 3. Načtení 3 nejbližších akcí
-  const { data: upcomingEvents } = await supabase
+  // 3. Načtení 3 nejbližších akcí (DOČASNĚ BEZ FILTRU DATA PRO TEST)
+  const { data: upcomingEvents, error: eventsError } = await supabase
     .from('events')
     .select('*')
-    .gte('date', new Date().toISOString())
+    // .gte('date', today)
     .order('date', { ascending: true })
     .limit(3);
+
+  if (eventsError) {
+    console.error('Chyba při načítání akcí:', {
+      zprava: eventsError.message,
+      detaily: eventsError.details,
+      kod: eventsError.code,
+      tip: eventsError.hint
+    })
+  }
 
   return (
     <div className="bg-white overflow-hidden">

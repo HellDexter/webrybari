@@ -1,10 +1,28 @@
-import { ExternalLink, FileText, Info } from "lucide-react";
+import React from "react";
+import { ExternalLink, FileText, Info, Calendar as CalendarIcon } from "lucide-react";
+import { createClient } from '@/utils/supabase/server';
 
 export const metadata = {
   title: "Ceny povolenek | ČRS MO Týn nad Vltavou",
 };
 
-export default function CenyPovolenekPage() {
+export default async function CenyPovolenekPage() {
+  const supabase = await createClient();
+  
+  // Načtení termínů z DB
+  const { data: schedule } = await supabase
+    .from('permit_schedule')
+    .select('*')
+    .order('date', { ascending: true });
+
+  // Seskupení podle měsíců
+  const months: Record<string, any[]> = {};
+  schedule?.forEach(entry => {
+    const monthName = new Date(entry.date).toLocaleString('cs-CZ', { month: 'long', year: 'numeric' });
+    if (!months[monthName]) months[monthName] = [];
+    months[monthName].push(entry);
+  });
+
   return (
     <div className="bg-white py-24 sm:py-32 flex-grow">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -69,6 +87,7 @@ export default function CenyPovolenekPage() {
               </div>
             </div>
           </div>
+
           {/* Informace o výdeji povolenek */}
           <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm mt-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-4">Výdejna povolenek MO</h2>
@@ -130,64 +149,35 @@ export default function CenyPovolenekPage() {
 
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-green-600" /> Harmonogram výdeje 2026
+                  <CalendarIcon className="w-5 h-5 text-green-600" /> Harmonogram výdeje
                 </h3>
                 
                 <div className="space-y-6">
-                  {/* Leden */}
-                  <div>
-                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Leden 2026</h4>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
-                      <span>2. 1. (Pá)</span> <span className="text-right">10:00 - 14:00</span>
-                      <span>3. 1. (So)</span> <span className="text-right">11:00 - 15:00</span>
-                      <span>4. 1. (Ne)</span> <span className="text-right">11:00 - 15:00</span>
-                      <span>8. 1. (Čt)</span> <span className="text-right">16:30 - 20:00</span>
-                      <span>10. 1. (So)</span> <span className="text-right">11:00 - 15:00</span>
-                      <span>11. 1. (Ne)</span> <span className="text-right">11:00 - 15:00</span>
-                      <span>15. 1. (Čt)</span> <span className="text-right">16:30 - 20:00</span>
-                      <span>17. 1. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                      <span>30. 1. (Pá)</span> <span className="text-right">16:30 - 20:00</span>
-                      <span>31. 1. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                    </div>
-                  </div>
+                  {Object.keys(months).length === 0 ? (
+                    <p className="text-gray-500 italic text-sm">Zatím nebyly vypsány žádné termíny pro výdej.</p>
+                  ) : (
+                    Object.entries(months).map(([month, entries]) => (
+                      <div key={month}>
+                        <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2 capitalize">{month}</h4>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
+                          {entries.map((entry) => (
+                            <React.Fragment key={entry.id}>
+                              <span>{new Date(entry.date).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', weekday: 'short' })}</span>
+                              <span className="text-right">{entry.start_time.slice(0, 5)} - {entry.end_time.slice(0, 5)}</span>
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  )}
 
-                  {/* Únor */}
-                  <div>
-                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Únor 2026</h4>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
-                      <span>7. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                      <span>14. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                      <span>21. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                      <span>28. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                    </div>
-                  </div>
-
-                  {/* Březen */}
-                  <div>
-                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Březen 2026</h4>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
-                      <span>14. 3. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                      <span>28. 3. (So)</span> <span className="text-right">11:00 - 14:00</span>
-                    </div>
-                  </div>
-
-                  {/* Duben */}
-                  <div>
-                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Duben 2026</h4>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2 border-b border-gray-100 pb-2">
-                      <span>11. 4. (So)</span> <span className="text-right">11:00 - 13:00</span>
-                      <span>25. 4. (So)</span> <span className="text-right">11:00 - 13:00</span>
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-gray-500 italic mt-4">
+                  <p className="text-xs text-gray-500 italic mt-4 border-t pt-4">
                     Výdej probíhá v rybářské klubovně v Týně nad Vltavou. Ostatní měsíce individuálně po dohodě.
                   </p>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

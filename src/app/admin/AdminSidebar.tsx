@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, FileText, Image as ImageIcon, Users, LogOut, MessageSquare, Globe, Menu, X } from 'lucide-react'
+import { Home, FileText, Image as ImageIcon, Users, LogOut, MessageSquare, Globe, Menu, X, Calendar } from 'lucide-react'
 import { logout } from './actions'
 
 interface Profile {
@@ -26,6 +26,7 @@ export default function AdminSidebar({ profile }: { profile: Profile }) {
   const navItems = [
     { href: '/admin', label: 'Přehled', icon: Home },
     { href: '/admin/clanky', label: 'Články a Novinky', icon: FileText },
+    { href: '/admin/vydej', label: 'Výdej povolenek', icon: Calendar },
     { href: '/admin/fotogalerie', label: 'Fotogalerie', icon: ImageIcon },
     { href: '/admin/dotazy', label: 'Dotazy a odpovědi', icon: MessageSquare },
     { href: '/admin/komunikace', label: 'Týmový Chat', icon: MessageSquare, color: 'text-green-400' },

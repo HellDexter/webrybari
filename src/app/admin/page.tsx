@@ -97,8 +97,8 @@ export default async function AdminDashboard() {
         <ul className="list-disc pl-5 space-y-2 text-gray-600">
           <li><strong>Články a Novinky:</strong> Místo pro psaní aktualit, pozvánek na závody nebo reportů.</li>
           <li><strong>Fotogalerie:</strong> Sem můžete nahrávat fotky z akcí nebo úlovky.</li>
-          {profile?.role === 'superuser' && (
-            <li><strong>Správa uživatelů:</strong> Jakožto hlavní administrátor zde můžete spravovat přístupy pro zástupce ostatních lodí.</li>
+          {(profile?.role === 'superuser' || profile?.role === 'administrator') && (
+            <li><strong>Správa uživatelů:</strong> Jakožto administrátor zde můžete spravovat přístupy.</li>
           )}
         </ul>
       </div>

@@ -181,57 +181,60 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Modernizovaná sekce Kalendář */}
-      <section className="py-24 bg-[#0a0f18] relative overflow-hidden">
-        {/* Dekorativní pozadí - jemná záře */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px]"></div>
+      {/* Sjednocená sekce Kalendář */}
+      <section className="py-24 bg-green-900 relative overflow-hidden">
+        {/* Dekorativní vlny na pozadí - stejné jako v Newsletteru */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+          <svg viewBox="0 0 1440 320" className="absolute bottom-0 w-full h-auto">
+            <path fill="#ffffff" fillOpacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,208C960,213,1056,171,1152,144C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+          </svg>
+        </div>
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-20">
             <div className="max-w-2xl">
               <div className="flex items-center gap-2 mb-4">
-                <span className="h-px w-8 bg-green-500"></span>
-                <span className="text-green-500 font-black uppercase tracking-[0.2em] text-xs">Plánované události</span>
+                <span className="h-px w-8 bg-green-400"></span>
+                <span className="text-green-400 font-black uppercase tracking-[0.2em] text-xs">Plánované události</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
-                Nejbližší <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">akce</span>
+                Nejbližší <span className="text-green-400">akce</span>
               </h2>
-              <p className="mt-4 text-lg text-gray-400">Sledujte společné výpravy, závody a důležitá setkání u vody.</p>
+              <p className="mt-4 text-lg text-green-100/80">Sledujte společné výpravy, závody a důležitá setkání u vody.</p>
             </div>
-            <Link href="/aktuality/kalendar" className="group flex items-center gap-3 text-white font-bold bg-white/5 hover:bg-green-600 px-6 py-3 rounded-full transition-all duration-300 border border-white/10 hover:border-green-500">
+            <Link href="/aktuality/kalendar" className="group flex items-center gap-3 text-white font-bold bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full transition-all duration-300 border border-white/10">
               Celý kalendář <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
           <div className="space-y-6">
             {upcomingEvents && upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event, idx) => (
+              upcomingEvents.map((event) => (
                 <div key={event.id} className="group relative flex flex-col md:flex-row gap-6 md:items-center">
                   {/* Datum - Kalendářový lístek */}
-                  <div className="flex-shrink-0 w-20 h-20 bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center group-hover:bg-green-600 group-hover:border-green-500 transition-all duration-500 shadow-xl">
-                    <span className="text-2xl font-black text-white leading-none">
+                  <div className="flex-shrink-0 w-20 h-20 bg-white/10 rounded-2xl border border-white/10 flex flex-col items-center justify-center group-hover:bg-white group-hover:border-white transition-all duration-500">
+                    <span className="text-2xl font-black text-white group-hover:text-green-900 leading-none">
                       {new Date(event.date).getDate()}
                     </span>
-                    <span className="text-[10px] font-black text-green-500 uppercase tracking-widest mt-1 group-hover:text-white transition-colors">
+                    <span className="text-[10px] font-black text-green-400 uppercase tracking-widest mt-1 group-hover:text-green-800 transition-colors">
                       {new Date(event.date).toLocaleDateString('cs-CZ', { month: 'short' }).replace('.', '')}
                     </span>
                   </div>
 
                   {/* Karta akce */}
-                  <div className="flex-grow bg-white/[0.03] backdrop-blur-sm border border-white/5 p-6 md:p-8 rounded-[2rem] hover:bg-white/[0.07] hover:border-white/20 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="flex-grow bg-white/5 backdrop-blur-sm border border-white/5 p-6 md:p-8 rounded-[2rem] hover:bg-white/10 hover:border-white/20 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="space-y-2">
-                      <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-green-400 transition-colors">
+                      <h3 className="text-xl md:text-2xl font-bold text-white">
                         {event.title}
                       </h3>
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
-                        <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
-                          <Clock className="w-4 h-4 text-green-500" /> 
+                      <div className="flex flex-wrap gap-4 text-sm text-green-100/60 font-medium">
+                        <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg">
+                          <Clock className="w-4 h-4 text-green-400" /> 
                           {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
                         </div>
                         {event.location && (
-                          <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
-                            <MapPin className="w-4 h-4 text-blue-400" /> 
+                          <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg">
+                            <MapPin className="w-4 h-4 text-green-400" /> 
                             {event.location}
                           </div>
                         )}
@@ -239,8 +242,8 @@ export default async function Home() {
                     </div>
                     
                     <div className="hidden md:block">
-                      <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-green-600 group-hover:border-green-500 transition-all duration-500">
-                        <ArrowRight className="w-5 h-5 text-white" />
+                      <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white transition-all duration-500">
+                        <ArrowRight className="w-5 h-5 text-white group-hover:text-green-900" />
                       </div>
                     </div>
                   </div>
@@ -248,7 +251,7 @@ export default async function Home() {
               ))
             ) : (
               <div className="py-12 px-8 bg-white/5 rounded-3xl border border-white/10 text-center">
-                <p className="text-gray-500 italic">Momentálně nejsou naplánovány žádné akce.</p>
+                <p className="text-green-100/40 italic">Momentálně nejsou naplánovány žádné akce.</p>
               </div>
             )}
           </div>

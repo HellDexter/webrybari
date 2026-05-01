@@ -9,7 +9,9 @@ import {
   Anchor,
   Fish,
   MapPin,
-  Clock
+  Clock,
+  Shield,
+  AlertTriangle
 } from "lucide-react";
 import WeatherWidget from "@/components/WeatherWidget";
 import Newsletter from "@/components/Newsletter";
@@ -17,13 +19,26 @@ import Newsletter from "@/components/Newsletter";
 export default async function Home() {
   const supabase = await createClient();
 
-  // 1. Načtení 3 nejnovějších publikovaných článků
-  const { data: latestArticles } = await supabase
+  // 1. Načtení novinek a hlášení stráže
+  const { data: articles } = await supabase
     .from('articles')
-    .select('*, category:categories(name)') // Opraveno na správnou tabulku categories
+    .select('*, category:categories(name)')
     .eq('published', true)
     .order('created_at', { ascending: false })
     .limit(3);
+
+  const { data: guardMessages } = await supabase
+    .from('guard_messages')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  // Spojení a seřazení novinek
+  const allNews = [
+    ...(articles || []).map(a => ({ ...a, type: 'article' })),
+    ...(guardMessages || []).map(g => ({ ...g, type: 'guard' }))
+  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+   .slice(0, 3);
 
   // 2. Načtení 3 nejnovějších alb
   const { data: latestAlbums } = await supabase
@@ -74,13 +89,10 @@ export default async function Home() {
             </div>
           </div>
           
-          {/* Widget počasí vpravo nahoře v oblasi červeného obdélníku */}
           <div className="w-full lg:max-w-[320px] mt-12 lg:mt-0 lg:absolute lg:top-8 lg:-right-12 xl:-right-32 z-10">
             <WeatherWidget />
           </div>
         </div>
-        
-        {/* Dekorativní prvek - vlna */}
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
       </div>
 
@@ -98,92 +110,104 @@ export default async function Home() {
               href={item.href} 
               className="group bg-white p-10 rounded-[3rem] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] border border-gray-100/50 hover:border-green-500/30 transition-all duration-500 hover:-translate-y-4 flex flex-col items-center text-center"
             >
-              <div className="relative w-32 h-32 mb-8 flex items-center justify-center">
-                {/* Dekorativní barevný kruh v pozadí obrázku */}
-                <div className={`absolute inset-0 ${item.accent} rounded-full scale-90 group-hover:scale-110 transition-transform duration-700 opacity-60`}></div>
-                <img 
-                  src={item.img} 
-                  alt={item.title} 
-                  className="relative z-10 w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3" 
-                />
+              <div className={`w-32 h-32 ${item.accent} rounded-full flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 relative`}>
+                 <div className="absolute inset-0 bg-white/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                 <img src={item.img} alt={item.title} className="w-24 h-24 object-contain relative z-10 drop-shadow-md" />
               </div>
-              <h3 className="text-xl font-black text-gray-900 mb-2 group-hover:text-green-700 transition-colors tracking-tight">{item.title}</h3>
-              <p className="text-gray-500 text-sm font-medium leading-relaxed opacity-80">{item.desc}</p>
+              <h3 className="text-xl font-black text-gray-900 mb-2 group-hover:text-green-600 transition-colors">{item.title}</h3>
+              <p className="text-sm font-medium text-gray-500">{item.desc}</p>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Aktuality Section */}
+      {/* Novinky a aktuality */}
       <section className="py-24 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
             <div className="max-w-2xl">
-              <h2 className="text-4xl font-bold tracking-tight text-gray-900">Aktuality a novinky</h2>
-              <p className="mt-4 text-lg text-gray-600">Sledujte, co se právě děje u vody i v naší organizaci.</p>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="h-px w-8 bg-green-500"></span>
+                <span className="text-green-600 font-bold uppercase tracking-widest text-xs">Aktuální dění</span>
+              </div>
+              <h2 className="text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Novinky z <span className="text-green-600">naší organizace</span></h2>
             </div>
-            <Link href="/aktuality" className="hidden md:flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-colors">
+            <Link href="/aktuality" className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-colors bg-green-50 px-6 py-3 rounded-full">
               Všechny zprávy <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {latestArticles && latestArticles.length > 0 ? (
-              latestArticles.map((article) => (
-                <article key={article.id} className="flex flex-col group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
-                  <Link href={`/aktuality/${article.slug}`} className="relative aspect-[16/10] overflow-hidden block">
-                    {article.featured_image_url ? (
-                      <img src={article.featured_image_url} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    ) : (
-                      <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
-                        <Fish className="w-12 h-12" />
-                      </div>
-                    )}
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-green-700 shadow-sm">
-                        {article.category?.name || 'Aktualita'}
-                      </span>
+            {allNews.map((item) => (
+              <article key={item.id} className="flex flex-col items-start group">
+                <div className="relative w-full aspect-[16/10] overflow-hidden rounded-[2.5rem] bg-gray-100 mb-8 shadow-lg">
+                  {item.type === 'guard' ? (
+                    <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                      <img 
+                        src={item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : '/images/guard_default.png'} 
+                        className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" 
+                        alt="" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-red-950/40 to-transparent"></div>
                     </div>
-                  </Link>
-                  <div className="p-8 flex flex-col flex-grow">
-                    <time className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                       <CalendarDays className="w-4 h-4 text-green-500" />
-                       {new Date(article.created_at).toLocaleDateString('cs-CZ')}
-                    </time>
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-snug mb-4">
-                      <Link href={`/aktuality/${article.slug}`}>{article.title}</Link>
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed mb-6 flex-grow">
-                      {article.content?.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').substring(0, 150)}...
-                    </p>
-                    <Link href={`/aktuality/${article.slug}`} className="inline-flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors group/link">
-                      Číst celý článek 
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                    </Link>
+                  ) : (
+                    <img
+                      src={item.featured_image_url || '/placeholder-news.jpg'}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <div className="absolute top-6 left-6">
+                    {item.type === 'guard' ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-1.5 text-xs font-black text-white shadow-lg">
+                        <Shield className="w-3.5 h-3.5" /> Rybářská stráž
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full bg-white px-4 py-1.5 text-xs font-black text-gray-900 shadow-lg">
+                        {item.category?.name || 'Aktualita'}
+                      </span>
+                    )}
                   </div>
-                </article>
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200">
-                <div className="max-w-xs mx-auto">
-                  <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 font-medium">Zatím jsme nenapsali žádné aktuality. Brzy se tu objeví!</p>
                 </div>
-              </div>
-            )}
-          </div>
-          
-          <div className="mt-12 md:hidden">
-            <Link href="/aktuality" className="flex items-center justify-center gap-2 text-green-600 font-bold py-4 border-2 border-green-100 rounded-xl">
-              Všechny zprávy <ArrowRight className="w-5 h-5" />
-            </Link>
+                
+                <div className="max-w-xl flex flex-col flex-grow">
+                  <div className="flex items-center gap-x-4 text-xs font-bold text-gray-400 mb-4">
+                    <time dateTime={item.created_at}>
+                      {new Date(item.created_at).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </time>
+                    {item.type === 'guard' && item.is_important && (
+                      <span className="text-red-600 flex items-center gap-1 uppercase tracking-widest text-[10px]">
+                        <AlertTriangle className="w-3.5 h-3.5" /> Důležité
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-2xl font-black leading-snug text-gray-900 group-hover:text-green-600 transition-colors mb-4">
+                    <Link href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}>
+                      {item.title}
+                    </Link>
+                  </h3>
+                  <p className="line-clamp-3 text-base leading-relaxed text-gray-500 font-medium mb-6 flex-grow">
+                    {item.type === 'guard' ? item.content : (item.content?.replace(/<[^>]*>/g, '').substring(0, 160) + '...')}
+                  </p>
+                  
+                  <Link 
+                    href={item.type === 'guard' ? '/pro-rybare/rybarska-straz' : `/aktuality/${item.id}`}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors group/link"
+                  >
+                    {item.type === 'guard' ? 'Více informací' : 'Číst celý článek'} 
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Sjednocená sekce Kalendář */}
-      <section className="py-24 bg-green-900 relative overflow-hidden">
-        {/* Dekorativní vlny na pozadí - stejné jako v Newsletteru */}
+      {/* Sjednocená sekce Kalendář - Kompaktní verze */}
+      <section className="py-12 bg-green-900 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
           <svg viewBox="0 0 1440 320" className="absolute bottom-0 w-full h-auto">
             <path fill="#ffffff" fillOpacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,208C960,213,1056,171,1152,144C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
@@ -191,23 +215,22 @@ export default async function Home() {
         </div>
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-20">
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="h-px w-8 bg-green-400"></span>
-                <span className="text-green-400 font-black uppercase tracking-[0.2em] text-xs">Plánované události</span>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="h-px w-6 bg-green-400"></span>
+                <span className="text-green-400 font-black uppercase tracking-[0.2em] text-[10px]">Plánované události</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white">
                 Nejbližší <span className="text-green-400">akce</span>
               </h2>
-              <p className="mt-4 text-lg text-green-100/80">Sledujte společné výpravy, závody a důležitá setkání u vody.</p>
             </div>
-            <Link href="/aktuality/kalendar" className="group flex items-center gap-3 text-white font-bold bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full transition-all duration-300 border border-white/10">
-              Celý kalendář <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <Link href="/aktuality/kalendar" className="group flex items-center gap-2 text-xs text-white font-bold bg-white/5 hover:bg-white/10 px-5 py-2 rounded-full transition-all duration-300 border border-white/5">
+              Celý kalendář <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-3">
             {upcomingEvents && upcomingEvents.length > 0 ? (
               upcomingEvents.map((event) => (
                 <Link 
@@ -215,39 +238,33 @@ export default async function Home() {
                   href="/aktuality/kalendar"
                   className="group block relative"
                 >
-                  <div className="relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/10 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-8 transition-all duration-500 hover:bg-white/15 hover:-translate-y-1 hover:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)]">
+                  <div className="relative overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:px-6 md:py-4 flex flex-col md:flex-row md:items-center gap-4 transition-all duration-300 hover:bg-white/10">
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
                     
-                    {/* Zelený akcentní proužek na boku */}
-                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 group-hover:w-3 transition-all duration-500"></div>
-
-                    {/* Datum - Moderní čistý styl */}
-                    <div className="flex-shrink-0 flex flex-col items-center justify-center min-w-[80px] border-r border-white/10 pr-8">
-                      <span className="text-4xl font-black text-white leading-none">
+                    {/* Datum - Kompaktní */}
+                    <div className="flex-shrink-0 flex items-center gap-3 border-r border-white/10 pr-4">
+                      <span className="text-2xl font-black text-white">
                         {new Date(event.date).getDate()}
                       </span>
-                      <span className="text-xs font-black text-green-500 uppercase tracking-widest mt-2">
+                      <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">
                         {new Date(event.date).toLocaleDateString('cs-CZ', { month: 'short' }).replace('.', '')}
                       </span>
                     </div>
 
                     {/* Informace o akci */}
-                    <div className="flex-grow space-y-4">
-                      <div className="space-y-1">
-                        <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                    <div className="flex-grow">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                        <h3 className="text-lg font-bold text-white group-hover:text-green-400 transition-colors">
                           {event.title}
                         </h3>
-                        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-                          <div className="flex items-center gap-2.5 text-gray-400 font-medium">
-                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                              <Clock className="w-4 h-4 text-green-500" />
-                            </div>
+                        <div className="flex items-center gap-4 text-[11px] text-gray-400 font-bold uppercase tracking-wider">
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-green-500" />
                             {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
                           </div>
                           {event.location && (
-                            <div className="flex items-center gap-2.5 text-gray-400 font-medium">
-                              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                                <MapPin className="w-4 h-4 text-green-500" />
-                              </div>
+                            <div className="flex items-center gap-1.5">
+                              <MapPin className="w-3.5 h-3.5 text-green-500" />
                               {event.location}
                             </div>
                           )}
@@ -255,111 +272,62 @@ export default async function Home() {
                       </div>
                     </div>
                     
-                    {/* Interaktivní prvek na pravé straně */}
-                    <div className="flex-shrink-0">
-                      <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-green-600 group-hover:border-green-500 transition-all duration-500">
-                        <ArrowRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
-                      </div>
-                    </div>
+                    <ArrowRight className="hidden md:block w-4 h-4 text-white/20 group-hover:text-white transition-all group-hover:translate-x-1" />
                   </div>
                 </Link>
               ))
             ) : (
-              <div className="py-12 px-8 bg-white/5 rounded-3xl border border-white/10 text-center">
-                <p className="text-green-100/40 italic">Momentálně nejsou naplánovány žádné akce.</p>
+              <div className="py-8 px-6 bg-white/5 rounded-2xl border border-white/10 text-center">
+                <p className="text-green-100/40 text-sm italic">Momentálně nejsou naplánovány žádné akce.</p>
               </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* Fotogalerie Section */}
-      <section className="py-24 bg-gray-50 border-y border-gray-100">
+      {/* Fotogalerie */}
+      <section className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold tracking-tight text-gray-900">Nejnovější alba</h2>
-            <p className="mt-4 text-lg text-gray-600">Nahlédněte do života naší organizace skrze objektiv.</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
-            {latestAlbums?.map((album) => (
-              <Link 
-                key={album.id} 
-                href={`/fotogalerie/${album.id}`}
-                className="group flex flex-col"
-              >
-                <div className="relative aspect-square overflow-hidden rounded-[2rem] shadow-md border border-gray-100 mb-6">
-                  {album.photos?.[0] ? (
-                    <img src={album.photos[0].image_url} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  ) : (
-                    <div className="w-full h-full bg-gray-200" />
-                  )}
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
-                  <div className="absolute bottom-4 left-4">
-                    <span className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
-                      <ImageIcon className="w-3.5 h-3.5 text-green-400" />
-                      {album.photos?.length || 0} fotek
-                    </span>
-                  </div>
-                </div>
-                <h4 className="text-xl font-bold text-gray-900 group-hover:text-green-700 transition-colors tracking-tight line-clamp-2">
-                  {album.title}
-                </h4>
-                <p className="mt-2 text-xs font-black text-gray-400 uppercase tracking-widest">
-                  {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
-                </p>
-              </Link>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <Link href="/fotogalerie" className="inline-flex items-center gap-3 px-8 py-4 bg-white border border-gray-200 rounded-full font-bold text-gray-900 hover:bg-gray-50 hover:shadow-md transition-all">
-              Vstoupit do fotogalerie <ImageIcon className="w-5 h-5 text-green-600" />
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="h-px w-8 bg-green-500"></span>
+                <span className="text-green-600 font-bold uppercase tracking-widest text-xs">Vzpomínky od vody</span>
+              </div>
+              <h2 className="text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Naše <span className="text-green-600">fotogalerie</span></h2>
+            </div>
+            <Link href="/aktuality/fotogalerie" className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-colors bg-white px-6 py-3 rounded-full shadow-sm border border-gray-100">
+              Všechna alba <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* O nás / Mise Section */}
-      <section className="py-24 relative">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative">
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-green-100 rounded-full -z-10 animate-pulse"></div>
-              <img 
-                src="/hero-bg.png" 
-                alt="Historie" 
-                className="rounded-3xl shadow-2xl rotate-1 group-hover:rotate-0 transition-transform duration-500"
-              />
-              <div className="absolute -bottom-6 -right-6 bg-green-600 p-8 rounded-3xl text-white shadow-xl hidden md:block">
-                <Users className="w-10 h-10 mb-4" />
-                <div className="text-3xl font-black italic">600+</div>
-                <div className="text-sm font-bold uppercase tracking-widest opacity-80">Aktivních členů</div>
-              </div>
-            </div>
-            <div className="space-y-8">
-              <h2 className="text-4xl font-bold text-gray-900">Naše poslání</h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Nejsme jen spolkem rybářů, jsme komunitou lidí, kterým není lhostejné naše životní prostředí. Staráme se o desítky kilometrů toků Vltavy a Lužnice, pravidelně zarybňujeme a vedeme k lásce k přírodě i ty nejmenší.
-              </p>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-green-600 font-bold">
-                    <Anchor className="w-5 h-5" /> Čisté vody
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {latestAlbums && latestAlbums.length > 0 ? (
+              latestAlbums.map((album) => (
+                <Link key={album.id} href={`/aktuality/fotogalerie/${album.id}`} className="group block">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] shadow-lg mb-4">
+                    <img
+                      src={album.photos?.[0]?.image_url || '/placeholder-gallery.jpg'}
+                      alt=""
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+                      <span className="text-white font-bold flex items-center gap-2">
+                        Otevřít album <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-500">Pravidelně uklízíme břehy a hlídáme čistotu toků.</p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-green-600 font-bold">
-                    <Fish className="w-5 h-5" /> Zarybňování
+                  <div className="px-4">
+                    <h3 className="text-lg font-black text-gray-900 group-hover:text-green-600 transition-colors leading-tight mb-1">{album.title}</h3>
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                       {new Date(album.event_date).toLocaleDateString('cs-CZ', { year: 'numeric', month: 'long' })}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-500">Ročně vypouštíme tisíce kusů původních druhů ryb.</p>
-                </div>
-              </div>
-              <Link href="/o-nas/organizace" className="inline-block pt-4 text-green-600 font-bold hover:underline">
-                Více o naší historii a struktuře &rarr;
-              </Link>
-            </div>
+                </Link>
+              ))
+            ) : (
+              <p className="text-gray-500 italic col-span-full text-center py-12">Zatím jsme nepřidali žádné fotografie.</p>
+            )}
           </div>
         </div>
       </section>

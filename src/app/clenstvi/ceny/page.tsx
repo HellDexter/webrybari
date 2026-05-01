@@ -91,35 +91,99 @@ export default function CenyPovolenekPage() {
                   </li>
                 </ul>
 
-                <h3 className="text-lg font-semibold text-gray-900 pt-4">Hostovací a CS povolenky</h3>
-                <p className="text-gray-600">
-                  Nabízíme možnost prodeje Celosvazových (CS) povolenek pro členy Moravského rybářského svazu (MRS) a další hostovací povolenky. Pro online nákup můžete využít také e-shop: <a href="http://shop.top-carp.cz/" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">shop.top-carp.cz</a>.
+                <h3 className="text-lg font-semibold text-gray-900 pt-4">Individuální výdej</h3>
+                <p className="text-gray-600 mb-4">
+                  Mimo níže uvedené termíny je možný individuální výdej po předchozí tel. domluvě:
                 </p>
+                <div className="bg-white p-4 border border-gray-200 rounded-xl space-y-2">
+                  <p className="text-gray-800 font-bold">Libor Bukovský</p>
+                  <p className="text-gray-600">Tel: <a href="tel:+420604873470" className="text-green-600 hover:underline">604 873 470</a></p>
+                  <p className="text-gray-600">E-mail: <a href="mailto:LiborBukovsky@seznam.cz" className="text-green-600 hover:underline">LiborBukovsky@seznam.cz</a></p>
+                </div>
+
+                <h3 className="text-lg font-semibold text-gray-900 pt-6">Hostovací a CS povolenky</h3>
+                <p className="text-gray-600">
+                  Nabízíme možnost prodeje Celosvazových (CS) povolenek pro členy MRS a další hostovací povolenky. 
+                  Pro on-line nákup <strong>pouze hostovacích povolenek</strong> můžete využít e-shop: <a href="http://shop.top-carp.cz/" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">shop.top-carp.cz</a>.
+                </p>
+
+                <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                  <h3 className="text-lg font-bold text-blue-900 mb-3">Máte účet v RIS?</h3>
+                  <p className="text-sm text-blue-800 mb-4">Využijte možnosti Rybářského Informačního Systému:</p>
+                  <ul className="space-y-2 text-sm text-blue-700">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                      On-line platba členských poplatků
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                      On-line platba a následné vyzvednutí povolenky
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                      Nákup elektronické povolenky
+                    </li>
+                  </ul>
+                  <a href="https://www.rybsvaz.cz" target="_blank" rel="noopener noreferrer" className="inline-block mt-4 text-blue-600 font-bold hover:underline">www.rybsvaz.cz</a>
+                </div>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Předběžný harmonogram výdeje</h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-semibold text-gray-700">Leden</span>
-                    <span className="text-gray-600">Bude upřesněno (připravujeme)</span>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-green-600" /> Harmonogram výdeje 2026
+                </h3>
+                
+                <div className="space-y-6">
+                  {/* Leden */}
+                  <div>
+                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Leden 2026</h4>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
+                      <span>2. 1. (Pá)</span> <span className="text-right">10:00 - 14:00</span>
+                      <span>3. 1. (So)</span> <span className="text-right">11:00 - 15:00</span>
+                      <span>4. 1. (Ne)</span> <span className="text-right">11:00 - 15:00</span>
+                      <span>8. 1. (Čt)</span> <span className="text-right">16:30 - 20:00</span>
+                      <span>10. 1. (So)</span> <span className="text-right">11:00 - 15:00</span>
+                      <span>11. 1. (Ne)</span> <span className="text-right">11:00 - 15:00</span>
+                      <span>15. 1. (Čt)</span> <span className="text-right">16:30 - 20:00</span>
+                      <span>17. 1. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                      <span>30. 1. (Pá)</span> <span className="text-right">16:30 - 20:00</span>
+                      <span>31. 1. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-semibold text-gray-700">Únor</span>
-                    <span className="text-gray-600">Bude upřesněno (připravujeme)</span>
+
+                  {/* Únor */}
+                  <div>
+                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Únor 2026</h4>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
+                      <span>7. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                      <span>14. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                      <span>21. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                      <span>28. 2. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-semibold text-gray-700">Březen</span>
-                    <span className="text-gray-600">Bude upřesněno (připravujeme)</span>
+
+                  {/* Březen */}
+                  <div>
+                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Březen 2026</h4>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2">
+                      <span>14. 3. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                      <span>28. 3. (So)</span> <span className="text-right">11:00 - 14:00</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-semibold text-gray-700">Duben - Prosinec</span>
-                    <span className="text-gray-600">Po předchozí tel. domluvě</span>
+
+                  {/* Duben */}
+                  <div>
+                    <h4 className="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-md mb-2">Duben 2026</h4>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 px-2 border-b border-gray-100 pb-2">
+                      <span>11. 4. (So)</span> <span className="text-right">11:00 - 13:00</span>
+                      <span>25. 4. (So)</span> <span className="text-right">11:00 - 13:00</span>
+                    </div>
                   </div>
+
+                  <p className="text-xs text-gray-500 italic mt-4">
+                    Výdej probíhá v rybářské klubovně v Týně nad Vltavou. Ostatní měsíce individuálně po dohodě.
+                  </p>
                 </div>
-                <p className="mt-4 text-xs text-gray-500 italic">
-                  * Přesné termíny a hodiny výdeje pro nadcházející sezónu budou vždy zveřejněny s předstihem v sekci Aktuality.
-                </p>
               </div>
             </div>
           </div>

@@ -107,12 +107,15 @@ export default function QuestionForm({ siteKey }: { siteKey?: string }) {
       </div>
 
       {/* Ochrana proti robotům (Cloudflare Turnstile) */}
-      <div className="mb-6 flex flex-col items-center md:items-start">
+      <div className="mb-6 flex flex-col items-center md:items-start min-h-[65px]">
         <div 
           className="cf-turnstile" 
           data-sitekey={activeSiteKey}
           data-theme="light"
         ></div>
+        <div className="mt-2 p-1 bg-gray-100 rounded text-[10px] text-gray-400 font-mono">
+          Debug ID: {activeSiteKey ? `${activeSiteKey.substring(0, 5)}...` : 'PRÁZDNÉ / NENALEZENO'}
+        </div>
       </div>
 
       {/* Ochrana proti robotům (Honeypot) */}

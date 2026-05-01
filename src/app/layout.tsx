@@ -31,7 +31,7 @@ export default async function RootLayout({
       .single();
 
     if (error) {
-      console.error('Chyba načítání profilu:', error);
+      // Tiché selhání pro produkci
     }
     
     // Fallback pokud záznam v profiles ještě neexistuje

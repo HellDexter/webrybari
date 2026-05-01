@@ -104,13 +104,20 @@ export default function QuestionForm() {
       </div>
 
       {/* Ochrana proti robotům (Cloudflare Turnstile) */}
-      <div className="mb-6 flex justify-center md:justify-start">
+      <div className="mb-6 flex flex-col items-center md:items-start">
         <div 
           className="cf-turnstile" 
           data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           data-theme="light"
         ></div>
+        {!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+          <p className="text-[10px] text-red-400 mt-1">Debug: Chybí SITE_KEY ve Vercelu</p>
+        )}
       </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `console.log("Turnstile Site Key status:", "${process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? 'Nastaven' : 'CHYBÍ'}");`
+      }} />
 
       {/* Ochrana proti robotům (Honeypot) */}
       <div className="hidden" aria-hidden="true">

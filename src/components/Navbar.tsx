@@ -146,7 +146,7 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
                 <span>{userProfile.first_name}</span>
               </div>
               
-              {(userProfile.role === 'superuser' || userProfile.role === 'administrator') && (
+              {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
                 <Link href="/admin" className="text-sm font-semibold leading-6 text-white bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded-md transition whitespace-nowrap">
                   Administrace
                 </Link>

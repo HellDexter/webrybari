@@ -10,26 +10,26 @@ export default function ReviryPage() {
     {
       id: "421 090",
       name: "VLTAVA 20 - KOŘENSKO",
-      specs: "10 km • 130 ha",
+      specs: "10 km • 130 ha • Platí i pro členy MRS",
       gps: "Z: 49°14‘26.804“N, 14°22‘45.168“E | K: 49°10‘54.067“N, 14°26‘44.971“E",
       mapCoords: {
         start: [49.2407788, 14.3792133] as [number, number],
         end: [49.1816852, 14.4458252] as [number, number],
       },
-      description: "Od hráze ponořeného stupně Kořensko až k tělesu hráze Hněvkovické nádrže a na Lužnickém rameni až po silniční most v Kolodějích nad Lužnicí (GPS 49°15‘9.541“N, 14°25‘13.191“E). K revíru patří pískovna Nový Dvůr (4 ha) v k. ú. Hosty.",
+      description: "Od hráze ponořeného stupně Kořensko až k tělesu hráze Hněvkovické nádrže a na Lužnickém rameni až po silniční most v Kolodějích nad Lužnicí. K revíru patří pískovna Nový Dvůr (4 ha) v k. ú. Hosty. Ostatní rybníky Nový Dvůr 1 a 2 do revíru nepatří!",
       rules: [
         "Zákaz lovu ryb ve vyznačeném úseku 100 m pod hrází Hněvkovické přehrady.",
-        "Zákaz rybolovu v podjezí jezu v Hněvkovicích.",
-        "Zákaz rybolovu v rozsahu plavební komory na jezu v Hněvkovicích a v čekacím stání v Neznašově.",
+        "Zákaz rybolovu v podjezí jezu v Hněvkovicích a v rozsahu plavební komory.",
         "Zákaz používání klepadel a šplouchadel a označování krmných míst plovoucími předměty.",
-        "Lov z plavidel a zavážení nástrah a návnad povoleno."
+        "Lov z plavidel a zavážení nástrah a návnad povoleno.",
+        "Na revíru platí také celosvazové a jihočeské územní povolenky."
       ],
-      warning: "Na pozemcích vodní nádrže je zakázáno terénní úpravy, stanování, kempování, rozdělávání ohňů a znečišťování přírody."
+      warning: "Na pozemcích vodní nádrže je zakázáno kempování, rozdělávání ohňů a znečišťování přírody."
     },
     {
       id: "421 012",
       name: "LUŽNICE 1",
-      specs: "5 km • 15 ha",
+      specs: "5 km • 15 ha • Platí i pro členy MRS",
       gps: "Z: 49°15‘10.125“N, 14°25‘13.431“E | K: 49°16‘31.059“N, 14°26‘7.519“E",
       mapCoords: {
         start: [49.2528125, 14.4203975] as [number, number],
@@ -38,9 +38,26 @@ export default function ReviryPage() {
       description: "Přítok Vltavy. Od silničního mostu v Kolodějích nad Lužnicí až k jezu Červeného mlýna v k. ú. Nuzice.",
       rules: [
         "Borovanský potok je CHRO – lov ryb zakázán.",
-        "Lov z plavidel na řece povolen."
+        "Lov z plavidel na řece povolen.",
+        "Na revíru platí také celosvazové a jihočeské územní povolenky."
       ],
-      warning: "Na pozemcích vodní nádrže je zakázáno terénní úpravy, stanování, kempování, rozdělávání ohňů a znečišťování přírody."
+      warning: "Na pozemcích vodní nádrže je zakázáno kempování a rozdělávání ohňů."
+    },
+    {
+      id: "421 013",
+      name: "LUŽNICE 1 B",
+      specs: "Rybník Rytíř • 4 ha",
+      gps: "49°16‘16.481“N, 14°27‘2.996“E",
+      mapCoords: {
+        start: [49.2712447, 14.4508322] as [number, number],
+        end: [49.2712447, 14.4508322] as [number, number],
+      },
+      description: "Rybník Rytíř v k. ú. Nuzice. Samostatný revír s vlastním režimem.",
+      rules: [
+        "Lov ryb povolen pouze z hráze rybníka.",
+        "Lov z plavidel a zavážení nástrah zakázáno.",
+        "Zákaz používání krmítek při lovu na položenou."
+      ]
     },
     {
       id: "421 095",
@@ -54,9 +71,10 @@ export default function ReviryPage() {
       description: "Levostranný přítok Lužnice. Od ústí do Lužnice pod Bechyní až k pramenům.",
       rules: [
         "Celý revír je vyhlášen jako Chráněná rybí oblast (CHRO).",
-        "Rybníky ležící na toku do rybářského revíru nepatří."
+        "Lov ryb je zde celoročně zakázán."
       ]
     }
+  ];
   ];
 
   return (

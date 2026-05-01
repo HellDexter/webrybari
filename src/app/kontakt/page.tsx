@@ -73,7 +73,7 @@ export default function KontaktPage() {
 
           <div className="bg-gray-100 rounded-2xl h-[400px] lg:h-full min-h-[400px] overflow-hidden relative shadow-inner border border-gray-200">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2610.0232234567!2d14.4178!3d49.2234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDnCsDEzJzI0LjIiTiAxNMKwMjUnMDQuMSJF!5e0!3m2!1scs!2scz!4v1620000000000!5m2!1scs!2scz" 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2594.13615456381!2d14.41627667690186!3d49.22324137932483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470ca446f2545d31%3A0x67399a5e8c3e8a94!2zWmFkbsOtIFBvZHNrYWzDrSA3NzMsIDM3NSAwMSBUw71uIG5hZCBWbHRhdm91!5e0!3m2!1scs!2scz!4v1714582800000!5m2!1scs!2scz" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 

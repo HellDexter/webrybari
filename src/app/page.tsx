@@ -7,7 +7,9 @@ import {
   Image as ImageIcon,
   Users,
   Anchor,
-  Fish
+  Fish,
+  MapPin,
+  Clock
 } from "lucide-react";
 import WeatherWidget from "@/components/WeatherWidget";
 import Newsletter from "@/components/Newsletter";
@@ -28,6 +30,14 @@ export default async function Home() {
     .from('galleries')
     .select('*, photos(image_url)')
     .order('event_date', { ascending: false })
+    .limit(3);
+
+  // 3. Načtení 3 nejbližších akcí
+  const { data: upcomingEvents } = await supabase
+    .from('events')
+    .select('*')
+    .gte('date', new Date().toISOString())
+    .order('date', { ascending: true })
     .limit(3);
 
   return (
@@ -161,6 +171,46 @@ export default async function Home() {
             <Link href="/aktuality" className="flex items-center justify-center gap-2 text-green-600 font-bold py-4 border-2 border-green-100 rounded-xl">
               Všechny zprávy <ArrowRight className="w-5 h-5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Nová sekce Kalendář na Homepage */}
+      <section className="py-24 bg-gray-900 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+            <div className="max-w-2xl">
+              <h2 className="text-4xl font-bold tracking-tight text-white">Nejbližší akce</h2>
+              <p className="mt-4 text-lg text-gray-400">Nezmeškejte závody, brigády a další setkání.</p>
+            </div>
+            <Link href="/aktuality/kalendar" className="flex items-center gap-2 text-green-400 font-bold hover:text-green-300 transition-colors">
+              Celý kalendář <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {upcomingEvents && upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event) => (
+                <div key={event.id} className="bg-gray-800/50 backdrop-blur border border-white/10 p-8 rounded-[2rem] hover:bg-gray-800 transition-colors group">
+                  <div className="text-green-500 font-black text-sm uppercase tracking-widest mb-4">
+                    {new Date(event.date).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })}
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-4 group-hover:text-green-400 transition-colors">{event.title}</h3>
+                  <div className="space-y-2 text-sm text-gray-400">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4" /> {new Date(event.date).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    {event.location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4" /> {event.location}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 italic col-span-full">Momentálně nejsou naplánovány žádné akce.</p>
+            )}
           </div>
         </div>
       </section>

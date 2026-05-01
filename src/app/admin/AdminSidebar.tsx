@@ -27,6 +27,7 @@ export default function AdminSidebar({ profile }: { profile: Profile }) {
     { href: '/admin', label: 'Přehled', icon: Home },
     { href: '/admin/clanky', label: 'Články a Novinky', icon: FileText },
     { href: '/admin/vydej', label: 'Výdej povolenek', icon: Calendar },
+    { href: '/admin/kalendar', label: 'Kalendář akcí', icon: Calendar },
     { href: '/admin/fotogalerie', label: 'Fotogalerie', icon: ImageIcon },
     { href: '/admin/dotazy', label: 'Dotazy a odpovědi', icon: MessageSquare },
     { href: '/admin/komunikace', label: 'Týmový Chat', icon: MessageSquare, color: 'text-green-400' },

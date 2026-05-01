@@ -15,7 +15,7 @@ export default function HistoriePage() {
           </p>
 
           <div className="prose prose-green prose-lg max-w-none text-gray-600">
-            <div className="relative float-right ml-6 mb-6 w-72 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-2 grayscale hover:grayscale-0 transition duration-500">
+            <div className="relative float-none sm:float-right mx-auto sm:ml-6 mb-6 w-full sm:w-72 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-0 sm:rotate-2 grayscale hover:grayscale-0 transition duration-500">
               <img src="/images/history/Image.jpg" alt="Historická fotografie" className="w-full h-auto" />
             </div>
             <p><strong>Vážené kolegyně rybářky, vážení kolegové rybáři.</strong></p>
@@ -23,7 +23,7 @@ export default function HistoriePage() {
               Píše se rok 1919, 29. listopadu. Stříbropěnná Vltava hučí týnskými jezy a netuší, že v této době je položen základní kámen pro budoucího patrona a ochránce. Tento den založilo 28 pánů z Vltavotýnska &quot;RYBÁŘSKÝ SPOLEK&quot;.
             </p>
             
-            <div className="relative float-left mr-6 mb-6 w-64 p-2 bg-white shadow-xl border border-gray-100 rounded-sm -rotate-2 grayscale hover:grayscale-0 transition duration-500">
+            <div className="relative float-none sm:float-left mx-auto sm:mr-6 mb-6 w-full sm:w-64 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-0 sm:-rotate-2 grayscale hover:grayscale-0 transition duration-500">
               <img src="/images/history/hist2.jpg" alt="Staré Týnské jezy" className="w-full h-auto" />
             </div>
             <p>
@@ -34,7 +34,7 @@ export default function HistoriePage() {
             <p>
               Cena rybářského lístku byla stanovena na 15 Kčs. V prvních letech měl rybářský lístek platnost jeden rok od data zakoupení. První prodej prováděl pan Bilič v drogerii na Horním Brašově. Držitel mohl lovit na tři udice a s příplatkem 25 Kčs i do dvou vrší.
             </p>
-            <div className="relative float-right ml-6 mb-6 w-80 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-1 grayscale hover:grayscale-0 transition duration-500">
+            <div className="relative float-none sm:float-right mx-auto sm:ml-6 mb-6 w-full sm:w-80 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-0 sm:rotate-1 grayscale hover:grayscale-0 transition duration-500">
               <img src="/images/history/hist3.jpg" alt="Historický lov" className="w-full h-auto" />
             </div>
             <p>
@@ -45,7 +45,7 @@ export default function HistoriePage() {
             </p>
 
             <h3 className="clear-both">20. a 30. léta - Růst i pohromy</h3>
-            <div className="relative float-left mr-6 mb-6 w-64 p-2 bg-white shadow-xl border border-gray-100 rounded-sm -rotate-1 grayscale hover:grayscale-0 transition duration-500">
+            <div className="relative float-none sm:float-left mx-auto sm:mr-6 mb-6 w-full sm:w-64 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-0 sm:-rotate-1 grayscale hover:grayscale-0 transition duration-500">
               <img src="/images/history/tyn25.jpg" alt="Týn nad Vltavou 1925" className="w-full h-auto" />
             </div>
             <p>
@@ -59,7 +59,7 @@ export default function HistoriePage() {
             </p>
 
             <h3 className="clear-both">Válečná léta a budování revírů</h3>
-            <div className="relative float-right ml-6 mb-4 w-72 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-2 grayscale hover:grayscale-0 transition duration-500">
+            <div className="relative float-none sm:float-right mx-auto sm:ml-6 mb-4 w-full sm:w-72 p-2 bg-white shadow-xl border border-gray-100 rounded-sm rotate-0 sm:rotate-2 grayscale hover:grayscale-0 transition duration-500">
               <img src="/images/history/hist1.jpg" alt="Staré časy" className="w-full h-auto" />
             </div>
             <p>

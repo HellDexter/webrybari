@@ -180,7 +180,7 @@ export default async function Home() {
       {/* Novinky a aktuality */}
       <section className="py-24 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
             <div className="max-w-2xl">
               <div className="flex items-center gap-2 mb-4">
                 <span className="h-px w-8 bg-green-500"></span>
@@ -355,7 +355,7 @@ export default async function Home() {
       {/* Fotogalerie */}
       <section className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
             <div className="max-w-2xl">
               <div className="flex items-center gap-2 mb-4">
                 <span className="h-px w-8 bg-green-500"></span>

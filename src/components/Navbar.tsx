@@ -67,12 +67,19 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
 
-  // Efekt pro změnu vzhledu při scrollu
+  // Efekt pro změnu vzhledu při scrollu s hysterezí (proti skákání)
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    const handleScroll = () => {
+      const offset = window.scrollY
+      if (!isScrolled && offset > 60) {
+        setIsScrolled(true)
+      } else if (isScrolled && offset < 20) {
+        setIsScrolled(false)
+      }
+    }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isScrolled])
 
   return (
     <header 

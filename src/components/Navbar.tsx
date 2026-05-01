@@ -1,56 +1,60 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, ChevronDown, User, LogOut, MapPin, Phone, Mail } from 'lucide-react'
+import { 
+  Menu, X, ChevronDown, User, LogOut, MapPin, Phone, Mail,
+  Info, History, Users, ExternalLink, Map, Shield, ScrollText, 
+  GraduationCap, Receipt, UserCircle, Baby, Newspaper, Trophy, 
+  Hammer, Fish, AlertCircle, Camera, MessageSquare, ArrowRight
+} from 'lucide-react'
 import { logout } from '@/app/admin/actions'
-
-// ... existing code navigation definition ...
+import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 
 const navigation = [
   {
     name: 'O nás',
     items: [
-      { name: 'O organizaci', href: '/o-nas/organizace' },
-      { name: 'Historie', href: '/o-nas/historie' },
-      { name: 'Výbor MO a kontakt', href: '/o-nas/vybor' },
-      { name: 'Zajímavé odkazy', href: '/o-nas/odkazy' },
-      { name: 'Kontakt', href: '/kontakt' },
+      { name: 'O organizaci', href: '/o-nas/organizace', desc: 'Kdo jsme a jaké je naše poslání', icon: Info },
+      { name: 'Historie', href: '/o-nas/historie', desc: 'Dlouhá tradice rybářství v Týně', icon: History },
+      { name: 'Výbor a kontakt', href: '/o-nas/vybor', desc: 'Lidé, kteří vedou naši organizaci', icon: Users },
+      { name: 'Zajímavé odkazy', href: '/o-nas/odkazy', desc: 'Užitečné zdroje pro rybáře', icon: ExternalLink },
+      { name: 'Napište nám', href: '/kontakt', desc: 'Kontaktní formulář a adresa', icon: Mail },
     ]
   },
   {
     name: 'Pro rybáře',
     items: [
-      { name: 'Naše revíry', href: '/pro-rybare/reviry' },
-      { name: 'Informace o RS', href: '/pro-rybare/rybarska-straz' },
-      { name: 'Rybářský řád', href: '/pro-rybare/rad' },
-      { name: 'Školení k získání RL', href: '/pro-rybare/skoleni' },
+      { name: 'Naše revíry', href: '/pro-rybare/reviry', desc: 'Detailní mapy a popisy vod', icon: Map },
+      { name: 'Rybářská stráž', href: '/pro-rybare/rybarska-straz', desc: 'Informace o kontrole a hlášení', icon: Shield },
+      { name: 'Rybářský řád', href: '/pro-rybare/rad', desc: 'Pravidla lovu pro aktuální rok', icon: ScrollText },
+      { name: 'Získání RL', href: '/pro-rybare/skoleni', desc: 'Školení pro nové rybáře', icon: GraduationCap },
     ]
   },
   {
-    name: 'Členství a povolenky',
+    name: 'Členství',
     items: [
-      { name: 'Ceny a výdej povolenek', href: '/clenstvi/ceny' },
-      { name: 'Informace pro členy', href: '/clenstvi/informace' },
-      { name: 'Práce s mládeží', href: '/clenstvi/mladez' },
+      { name: 'Ceny povolenek', href: '/clenstvi/ceny', desc: 'Ceník a výdejní místa', icon: Receipt },
+      { name: 'Info pro členy', href: '/clenstvi/informace', desc: 'Práva a povinnosti člena', icon: UserCircle },
+      { name: 'Práce s mládeží', href: '/clenstvi/mladez', desc: 'Kroužky a akce pro děti', icon: Baby },
     ]
   },
   {
-    name: 'Dění v organizaci',
+    name: 'Aktuality',
     items: [
-      { name: 'Všechny aktuality', href: '/aktuality' },
-      { name: 'Obecné zprávy', href: '/aktuality?kategorie=Obecné články a zprávy' },
-      { name: 'Závody', href: '/aktuality?kategorie=Závody' },
-      { name: 'Brigády', href: '/aktuality?kategorie=Brigády' },
-      { name: 'Zarybňování', href: '/aktuality?kategorie=Zarybňování' },
-      { name: 'Hlášení stráže', href: '/aktuality?kategorie=straz' },
+      { name: 'Všechny novinky', href: '/aktuality', desc: 'Kompletní přehled dění', icon: Newspaper },
+      { name: 'Závody', href: '/aktuality?kategorie=Závody', desc: 'Termíny a výsledky soutěží', icon: Trophy },
+      { name: 'Brigády', href: '/aktuality?kategorie=Brigády', desc: 'Plánované pracovní akce', icon: Hammer },
+      { name: 'Zarybňování', href: '/aktuality?kategorie=Zarybňování', desc: 'Zprávy o vysazování ryb', icon: Fish },
+      { name: 'Hlášení stráže', href: '/aktuality?kategorie=straz', desc: 'Aktuální situace u vody', icon: AlertCircle },
     ]
   },
   {
-    name: 'Média a dotazy',
+    name: 'Média',
     items: [
-      { name: 'Fotogalerie', href: '/fotogalerie' },
-      { name: 'Ptejte se (Dotazy)', href: '/dotazy' },
+      { name: 'Fotogalerie', href: '/fotogalerie', desc: 'Momentky z našich akcí', icon: Camera },
+      { name: 'Dotazy', href: '/dotazy', desc: 'Časté otázky a odpovědi', icon: MessageSquare },
     ]
   }
 ]
@@ -60,33 +64,56 @@ type UserProfile = { first_name: string; last_name: string; role: string } | nul
 export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const pathname = usePathname()
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  // Efekt pro změnu vzhledu při scrollu
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Horní informační lišta */}
-      <div className="bg-green-900 text-white py-2 hidden md:block">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-          <div className="flex gap-8">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-green-400" />
-              <span>Zadní Podskalí 773, 375 01 Týn nad Vltavou</span>
+    <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-white'}`}>
+      {/* Horní informační lišta - nyní kompaktnější a v prémiovém stylu */}
+      <AnimatePresence>
+        {!isScrolled && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="bg-green-950 text-white overflow-hidden hidden md:block border-b border-white/5"
+          >
+            <div className="mx-auto max-w-7xl px-8 py-2.5 flex justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
+              <div className="flex gap-10">
+                <div className="flex items-center gap-2.5">
+                  <MapPin className="w-3.5 h-3.5 text-green-500" />
+                  <span>Zadní Podskalí 773, Týn n. Vlt.</span>
+                </div>
+                <a href="tel:+420724034501" className="flex items-center gap-2.5 hover:text-white transition-colors">
+                  <Phone className="w-3.5 h-3.5 text-green-500" />
+                  <span>+420 724 034 501</span>
+                </a>
+              </div>
+              <a href="mailto:info@rybarityn.cz" className="flex items-center gap-2.5 hover:text-white transition-colors">
+                <Mail className="w-3.5 h-3.5 text-green-500" />
+                <span>info@rybarityn.cz</span>
+              </a>
             </div>
-            <a href="tel:+420724034501" className="flex items-center gap-2 hover:text-green-400 transition-colors">
-              <Phone className="w-3.5 h-3.5 text-green-400" />
-              <span>+420 724 034 501</span>
-            </a>
-          </div>
-          <a href="mailto:info@rybarityn.cz" className="flex items-center gap-2 hover:text-green-400 transition-colors">
-            <Mail className="w-3.5 h-3.5 text-green-400" />
-            <span>info@rybarityn.cz</span>
-          </a>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
+      <nav className={`mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 transition-all duration-500 ${isScrolled ? 'py-2' : 'py-4'}`} aria-label="Global">
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-            <span className="text-xl font-bold text-green-700 tracking-tight">ČRS Týn nad Vltavou</span>
+          <Link href="/" className="flex items-center group">
+            <div className="flex flex-col">
+              <span className="text-xl font-black text-gray-900 leading-none tracking-tight group-hover:text-green-600 transition-colors">
+                ČRS MO <span className="text-green-600 group-hover:text-green-700 transition-colors">Týn</span> nad Vltavou
+              </span>
+              <span className="mt-1.5 text-[9px] font-black uppercase tracking-[0.3em] text-gray-400">Místní organizace</span>
+            </div>
           </Link>
         </div>
         
@@ -94,17 +121,19 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className="p-2.5 text-gray-700 bg-gray-100 rounded-xl hover:bg-green-50 hover:text-green-600 transition-colors"
             onClick={() => setMobileMenuOpen(true)}
           >
-            <span className="sr-only">Otevřít hlavní menu</span>
-            <Menu className="h-6 w-6" aria-hidden="true" />
+            <Menu className="h-6 w-6" />
           </button>
         </div>
 
         {/* Desktop menu */}
-        <div className="hidden lg:flex lg:gap-x-6">
-          <Link href="/" className="text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 transition whitespace-nowrap">
+        <div className="hidden lg:flex lg:gap-x-2">
+          <Link 
+            href="/" 
+            className={`px-4 py-2 text-sm font-bold tracking-wide transition-all rounded-xl ${pathname === '/' ? 'text-green-600 bg-green-50' : 'text-gray-600 hover:text-green-600 hover:bg-gray-50'}`}
+          >
             Úvod
           </Link>
 
@@ -115,132 +144,183 @@ export default function Navbar({ userProfile }: { userProfile: UserProfile }) {
               onMouseEnter={() => setActiveDropdown(navItem.name)}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 transition outline-none whitespace-nowrap">
+              <button className={`flex items-center gap-x-1.5 px-4 py-2 text-sm font-bold tracking-wide transition-all rounded-xl outline-none ${activeDropdown === navItem.name ? 'text-green-600 bg-green-50' : 'text-gray-600 hover:text-green-600 hover:bg-gray-50'}`}>
                 {navItem.name}
-                <ChevronDown className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${activeDropdown === navItem.name ? 'rotate-180 text-green-500' : 'text-gray-300'}`} />
               </button>
 
-              {/* Dropdown panel */}
-              {activeDropdown === navItem.name && (
-                <div className="absolute -left-4 top-full z-10 pt-2 w-56 transition-all duration-200 opacity-100 translate-y-0">
-                  <div className="rounded-xl bg-white p-2 shadow-lg ring-1 ring-gray-900/5">
-                    {navItem.items.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold leading-6 text-gray-900 hover:bg-green-50 hover:text-green-600"
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Mega-menu Dropdown */}
+              <AnimatePresence>
+                {activeDropdown === navItem.name && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute -left-10 top-full pt-4 w-[320px] z-[60]"
+                  >
+                    <div className="rounded-[2rem] bg-white/95 backdrop-blur-xl p-3 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] ring-1 ring-black/5 border border-white/50">
+                      <div className="grid grid-cols-1 gap-1">
+                        {navItem.items.map((item, idx) => (
+                          <motion.div
+                            key={item.name}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.05 }}
+                          >
+                            <Link
+                              href={item.href}
+                              className="group flex items-start gap-4 rounded-2xl p-3 transition-all hover:bg-green-50"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <div className="flex-auto">
+                                <p className="text-sm font-bold text-gray-900 group-hover:text-green-600 transition-colors">
+                                  {item.name}
+                                </p>
+                                <p className="mt-0.5 text-xs font-medium text-gray-400 leading-tight">
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
           {userProfile ? (
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-gray-700 font-medium whitespace-nowrap bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
-                <User className="w-4 h-4 text-green-600" />
+            <div className="flex items-center gap-3 bg-gray-50 p-1 rounded-2xl border border-gray-100">
+              <div className="flex items-center gap-2.5 pl-3 pr-2 text-sm font-bold text-gray-700">
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                  <UserCircle className="w-5 h-5 text-green-600" />
+                </div>
                 <span>{userProfile.first_name}</span>
               </div>
               
               {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
-                <Link href="/admin" className="text-sm font-bold leading-6 text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all whitespace-nowrap">
-                  ADMINISTRACE
+                <Link href="/admin" className="text-xs font-black tracking-widest leading-6 text-white bg-green-600 hover:bg-green-500 px-5 py-2 rounded-xl shadow-md hover:shadow-green-200 transition-all uppercase">
+                  Admin
                 </Link>
               )}
 
               <form action={logout}>
-                <button type="submit" className="text-gray-400 hover:text-red-600 transition p-1.5 bg-gray-50 hover:bg-red-50 rounded-md border border-gray-100" title="Odhlásit se">
-                  <LogOut className="w-4 h-4" />
+                <button type="submit" className="text-gray-400 hover:text-red-600 transition p-2 hover:bg-red-50 rounded-xl" title="Odhlásit se">
+                  <LogOut className="w-5 h-5" />
                 </button>
               </form>
             </div>
           ) : (
-            <Link href="/login" className="text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 transition whitespace-nowrap">
-              Přihlásit se <span aria-hidden="true">&rarr;</span>
+            <Link href="/login" className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-gray-700 hover:text-green-600 bg-gray-50 hover:bg-green-50 rounded-xl transition-all border border-gray-100">
+              <User className="w-4 h-4" />
+              Přihlásit se
             </Link>
           )}
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden" role="dialog" aria-modal="true">
-          <div className="fixed inset-0 z-50 bg-black/20" onClick={() => setMobileMenuOpen(false)}></div>
-          <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-4 py-4 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-            <div className="flex items-center justify-between mb-6">
-              <span className="text-xl font-bold text-green-700">ČRS Menu</span>
-              <button
-                type="button"
-                className="-m-2.5 rounded-md p-2.5 text-gray-700"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="sr-only">Zavřít menu</span>
-                <X className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-            
-            <div className="flow-root">
-              <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  <Link href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>
-                    Úvod
-                  </Link>
-                  
-                  {navigation.map((navItem) => (
-                    <div key={navItem.name} className="space-y-1 pt-2">
-                      <div className="px-3 text-sm font-bold text-gray-500 uppercase tracking-wider">{navItem.name}</div>
+      {/* Mobile menu - Kompletně předělané na moderní full-screen */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 lg:hidden"
+          >
+            <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center">
+                    <Fish className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-xl font-black text-gray-900">Menu</span>
+                </div>
+                <button
+                  type="button"
+                  className="p-2.5 rounded-xl bg-gray-100 text-gray-700"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <Link 
+                  href="/" 
+                  className="block text-lg font-bold text-gray-900 p-4 bg-gray-50 rounded-2xl" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Hlavní strana
+                </Link>
+                
+                {navigation.map((navItem) => (
+                  <div key={navItem.name} className="space-y-2">
+                    <div className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{navItem.name}</div>
+                    <div className="grid grid-cols-1 gap-1">
                       {navItem.items.map((item) => (
-                         <Link
+                        <Link
                           key={item.name}
                           href={item.href}
-                          className="-mx-3 block rounded-lg px-6 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-green-50 hover:text-green-600"
+                          className="flex items-center gap-4 rounded-2xl p-4 transition-all hover:bg-green-50 active:bg-green-100"
                           onClick={() => setMobileMenuOpen(false)}
                         >
-                          {item.name}
+                          <span className="text-base font-bold text-gray-900">{item.name}</span>
                         </Link>
                       ))}
                     </div>
-                  ))}
-                </div>
-                
-                <div className="py-6">
-                  {userProfile ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 px-3 text-sm font-medium text-gray-700 bg-gray-50 py-2 rounded-md">
-                        <User className="w-4 h-4" />
-                        <span>Přihlášen jako: {userProfile.first_name} {userProfile.last_name}</span>
-                      </div>
-                      
-                      {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
-                        <Link href="/admin" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-bold leading-7 text-white bg-green-600 hover:bg-green-700 text-center shadow-inner" onClick={() => setMobileMenuOpen(false)}>
-                          VSTOUPIT DO ADMINISTRACE
-                        </Link>
-                      )}
-                      
-                      <form action={logout}>
-                        <button type="submit" className="-mx-3 flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-red-600 hover:bg-red-50">
-                          <LogOut className="w-5 h-5" /> Odhlásit se
-                        </button>
-                      </form>
-                    </div>
-                  ) : (
-                    <Link href="/login" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>
-                      Přihlásit se
-                    </Link>
-                  )}
-                </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+
+              <div className="mt-10 pt-10 border-t border-gray-100">
+                {userProfile ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl">
+                      <UserCircle className="w-6 h-6 text-green-600" />
+                      <span className="font-bold text-gray-900">{userProfile.first_name} {userProfile.last_name}</span>
+                    </div>
+                    {['superuser', 'administrator'].includes(String(userProfile.role).toLowerCase()) && (
+                      <Link 
+                        href="/admin" 
+                        className="block w-full py-4 text-center text-white bg-green-600 font-black rounded-2xl shadow-lg"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        VSTOUPIT DO ADMINISTRACE
+                      </Link>
+                    )}
+                    <form action={logout}>
+                      <button type="submit" className="w-full py-4 flex items-center justify-center gap-2 text-red-600 font-bold hover:bg-red-50 rounded-2xl transition-colors">
+                        <LogOut className="w-5 h-5" /> Odhlásit se
+                      </button>
+                    </form>
+                  </div>
+                ) : (
+                  <Link 
+                    href="/login" 
+                    className="block w-full py-4 text-center text-white bg-gray-900 font-black rounded-2xl shadow-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    PŘIHLÁSIT SE
+                  </Link>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }

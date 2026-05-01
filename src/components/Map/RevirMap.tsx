@@ -63,8 +63,8 @@ export default function RevirMap({ startPos, endPos, revirName }: RevirMapProps)
         style={{ height: '100%', width: '100%', minHeight: '300px' }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          attribution='&copy; Google Maps'
+          url="https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
         />
 
         <Marker position={startPos} icon={startIcon}>

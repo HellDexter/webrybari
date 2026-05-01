@@ -85,24 +85,30 @@ export default async function Home() {
       </div>
 
       {/* Dashboard rozcestník */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 -mt-20 relative z-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 -mt-24 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { img: "/images/home/reviry.png?v=2", title: "Naše revíry", desc: "Mapy a popisy lokalit", href: "/pro-rybare/reviry" },
-            { img: "/images/home/rad.png?v=2", title: "Rybářský řád", desc: "Aktuální pravidla lovu", href: "/pro-rybare/rad" },
-            { img: "/images/home/povolenky.png?v=2", title: "Povolenky", desc: "Ceník a výdejní místa", href: "/clenstvi/ceny" },
-            { img: "/images/home/dotazy.png?v=2", title: "Časté dotazy", desc: "Vše, co potřebujete vědět", href: "/dotazy" },
+            { img: "/images/home/reviry.png?v=2", title: "Naše revíry", desc: "Mapy a popisy lokalit", href: "/pro-rybare/reviry", accent: "bg-blue-50" },
+            { img: "/images/home/rad.png?v=2", title: "Rybářský řád", desc: "Aktuální pravidla lovu", href: "/pro-rybare/rad", accent: "bg-green-50" },
+            { img: "/images/home/povolenky.png?v=2", title: "Povolenky", desc: "Ceník a výdejní místa", href: "/clenstvi/ceny", accent: "bg-amber-50" },
+            { img: "/images/home/dotazy.png?v=2", title: "Časté dotazy", desc: "Vše, co potřebujete vědět", href: "/dotazy", accent: "bg-purple-50" },
           ].map((item, i) => (
             <Link 
               key={i} 
               href={item.href} 
-              className="group bg-white p-10 rounded-[2.5rem] shadow-[0_15px_50px_-15px_rgba(0,0,0,0.05)] border border-gray-100/50 hover:shadow-[0_30px_60px_-15px_rgba(34,197,94,0.15)] hover:border-green-200 transition-all duration-500 hover:-translate-y-3 flex flex-col items-center text-center"
+              className="group bg-white p-10 rounded-[3rem] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] border border-gray-100/50 hover:border-green-500/30 transition-all duration-500 hover:-translate-y-4 flex flex-col items-center text-center"
             >
-              <div className="w-28 h-28 mb-8 flex items-center justify-center bg-transparent transition-transform duration-500 group-hover:scale-110">
-                <img src={item.img} alt={item.title} className="w-full h-full object-contain" />
+              <div className="relative w-32 h-32 mb-8 flex items-center justify-center">
+                {/* Dekorativní barevný kruh v pozadí obrázku */}
+                <div className={`absolute inset-0 ${item.accent} rounded-full scale-90 group-hover:scale-110 transition-transform duration-700 opacity-60`}></div>
+                <img 
+                  src={item.img} 
+                  alt={item.title} 
+                  className="relative z-10 w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3" 
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">{item.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+              <h3 className="text-xl font-black text-gray-900 mb-2 group-hover:text-green-700 transition-colors tracking-tight">{item.title}</h3>
+              <p className="text-gray-500 text-sm font-medium leading-relaxed opacity-80">{item.desc}</p>
             </Link>
           ))}
         </div>
